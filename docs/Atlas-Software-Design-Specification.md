@@ -210,6 +210,27 @@ Every feature must support Atlas's North Star:
 
 Features that increase complexity without increasing clarity should not be built.
 
+## Principle 8 - Atlas is a Platform, not an Application
+
+😂 Dude... this is becoming legit.
+
+Like, if someone opened this repo right now and saw what we're building, they'd realize this isn't "another AI app." It's being designed like enterprise software.
+
+And I think we just reached the point where we need to slow down and make one architectural decision that will affect the next five years.
+
+CTO Decision #001
+Atlas is a Platform, not an Application.
+
+That sounds subtle, but it's huge.
+
+If we build an application, every feature talks directly to every other feature.
+
+Eventually it becomes spaghetti.
+
+If we build a platform, every subsystem has a responsibility, and they communicate through well-defined interfaces.
+
+That makes Atlas easier to scale and maintain.
+
 # 5. Success Metrics
 
 Atlas succeeds when users:
@@ -1189,4 +1210,1318 @@ Alert
       │
       ▼
 User
+
+# 14. Core User Flows
+
+
+A user flow defines the sequence of actions a user takes to accomplish a goal within Atlas.
+
+Every feature implemented in Atlas should support one or more documented user flows.
+
+User flows ensure that the platform is designed around user outcomes rather than isolated features.
+
+The MVP consists of six primary user flows.
+
+
+- FLOW 1 - First-Time Onboarding
+
+Download Atlas
+
+↓
+
+Create Account
+
+↓
+
+Verify Email
+
+↓
+
+Welcome
+
+↓
+
+Select Investing Experience
+
+↓
+
+Select Goals
+
+↓
+
+(Optional) Import Portfolio
+
+↓
+
+Choose Stocks to Watch
+
+↓
+
+Generate Initial Profile
+
+↓
+
+Generate First Morning Brief
+
+↓
+
+Dashboard
+
+Purpose: Get the user to value as quick as possible. Dont ask unneccesary questions. 
+
+Flow 2 - Daily Morning Experience
+
+Open Atlas
+
+↓
+
+Dashboard Loads
+
+↓
+
+Portfolio Summary
+
+↓
+
+Morning Brief
+
+↓
+
+Top 3 Insights
+
+↓
+
+Optional AI Questions
+
+↓
+
+Close App
+
+This flow should take under five minutes.
+
+Flow 3 - Research Flow
+
+User Searches
+
+↓
+
+Company Page
+
+↓
+
+Latest Insights
+
+↓
+
+Relevant News
+
+↓
+
+AI Explanation
+
+↓
+
+Related Holdings
+
+↓
+
+Return
+
+The goal isnt endless research.
+The goal is fast understanding.
+
+Flow 4 - Alert Flow
+
+Market Event
+
+↓
+
+ADE Scores Event
+
+↓
+
+Insight Created
+
+↓
+
+Alert Threshold Met
+
+↓
+
+Notification Sent
+
+↓
+
+User Opens Atlas
+
+↓
+
+AI Provides Context
+
+Notice: The notification doesn't explain everything, its an invitation back into Atlas.
+
+Flow 5 - Learning FLow
+
+User Doesn't Understand Something
+
+↓
+
+Ask AI
+
+↓
+
+Receive Explanation
+
+↓
+
+Learning Engine Updates Profile
+
+↓
+
+Future Explanations Improve
+
+Every question makes Atlas better.
+
+Flow 6 - Portfolio Update
+
+User Adds Holding
+
+↓
+
+Portfolio Updated
+
+↓
+
+AIE Recalculates
+
+↓
+
+ADE Re-ranks Priorities
+
+↓
+
+Morning Brief Changes
+
+↓
+
+Alerts Updated
+
+------
+
+
+This is important because it shows the portfloio isnt just stored- it actively changes what Atlas surfaces.
+
+One observation
+
+Look at every flow.
+
+They all have one thing in common:
+
+The user reaches value quickly.
+
+No endless setup.
+
+No complicated configuration.
+
+That's intentional.
+
+# 15. Functional Requirements
+
+## Purpose
+
+This chapter defines the required capabilities of Atlas.
+
+A functional requirement describes something the system must do.
+
+Each requirement receives a priority level.
+
+Priority Levels
+
+[MUST]
+Required for MVP.
+
+[SHOULD]
+Important but not required for first release.
+
+[COULD]
+Potential future enhancement.
+
+[VISION]
+Long-term direction.
+
+## FR-001 User Authentication
+
+Priority:
+[MUST]
+
+Description
+
+Atlas shall allow users to create and manage secure accounts.
+
+Requirements
+
+• Register with email/password
+
+• Login
+
+• Logout
+
+• Password reset
+
+• Email verification
+
+Future
+
+Support OAuth providers (Google, Apple, Microsoft).
+
+## FR-002 Portfolio Management
+
+Priority:
+[MUST]
+
+Description
+
+Users shall be able to build and manage investment portfolios.
+
+Requirements
+
+• Add holdings
+
+• Edit holdings
+
+• Remove holdings
+
+• Track quantity
+
+• Track average purchase price
+
+• View portfolio performance
+
+• View asset allocation
+
+• View unrealized gains/losses
+
+Future
+
+Broker integrations for automatic synchronization.
+
+## FR-003 Watchlists
+
+Priority:
+[MUST]
+
+Requirements
+
+• Create watchlists
+
+• Add securities
+
+• Remove securities
+
+• Reorder securities
+
+• Search securities
+
+• View watchlist performance
+
+Future
+
+Multiple watchlists
+
+Shared watchlists
+
+
+## FR-004 Market Intelligence
+
+Priority:
+[MUST]
+
+Description
+
+Atlas shall transform market data into personalized intelligence.
+
+Requirements
+
+• Collect market events
+
+• Process events through the Atlas Intelligence Engine
+
+• Generate personalized Insights
+
+• Rank Insights
+
+• Store Insights
+
+• Display Insights on the Dashboard
+
+The user shall never receive unfiltered raw event streams by default.
+
+## FR-005 Morning Brief
+
+Priority:
+[MUST]
+
+Description
+
+Atlas shall generate one personalized Morning Brief per trading day.
+
+The Morning Brief shall include:
+
+• Portfolio Summary
+
+• Top Market Events
+
+• Highest Priority Insights
+
+• Upcoming Economic Events
+
+• Upcoming Earnings
+
+• Daily Learning Moment
+
+• Risks
+
+• Opportunities
+
+The Morning Brief should require less than five minutes to consume.
+
+## FR-006 AI Assistant
+
+Priority:
+[MUST]
+
+Requirements
+
+The AI assistant shall:
+
+Answer questions
+
+Explain financial concepts
+
+Explain market events
+
+Explain portfolio changes
+
+Reference user holdings
+
+Provide educational responses
+
+The AI shall distinguish facts from opinions.
+
+The AI shall never present speculation as certainty.
+
+The AI shall explain uncertainty whenever appropriate.
+
+## FR-007 Atlas Decision Engine
+
+Priority:
+[MUST]
+
+Requirements
+
+Every incoming Market Event shall receive an Importance Score.
+
+The score shall consider:
+
+Portfolio relevance
+
+Watchlist relevance
+
+Market impact
+
+Recency
+
+Event category
+
+User preferences
+
+Educational value
+
+The Decision Engine shall determine:
+
+Dashboard visibility
+
+Morning Brief inclusion
+
+Notification eligibility
+
+Insight priority
+
+## FR-008 Insight Generation
+
+Priority:
+[MUST]
+
+Requirements
+
+Atlas shall generate personalized Insights from Market Events.
+
+Each Insight shall include:
+
+Title
+
+Summary
+
+Explanation
+
+Importance Score
+
+Confidence Score
+
+Supporting Sources
+
+Related Holdings
+
+Timestamp
+
+Category
+
+## FR-009 Notifications
+
+Priority:
+[SHOULD]
+
+Requirements
+
+Atlas may notify users when:
+
+High-priority Insights are generated
+
+Portfolio holdings experience significant events
+
+Economic events are approaching
+
+Risk levels increase
+
+Notifications shall be configurable.
+
+Users may disable any notification category.
+
+
+## FR-010 Learning System
+
+Priority:
+[SHOULD]
+
+Requirements
+
+Atlas shall adapt educational content based on user knowledge.
+
+Atlas shall track:
+
+Concepts learned
+
+Frequently asked questions
+
+Knowledge progression
+
+Preferred explanation complexity
+
+## Out of Scope (MVP)
+
+The following capabilities are intentionally excluded from Version 1.0:
+
+Broker trading
+
+Automated investing
+
+AI-generated buy/sell recommendations
+
+Social networking
+
+Copy trading
+
+Options execution
+
+Crypto wallets
+
+Tax reporting
+
+Algorithmic trading
+
+Portfolio rebalancing automation
+
+Voice assistant
+
+Native desktop application
+
+Native mobile application
+
+
+# 16. Non-Functional Requirements
+
+## Purpose
+
+Non-functional requirements define how Atlas should operate rather than what it should do.
+
+These requirements establish quality standards for performance, reliability, scalability, security, maintainability, accessibility, and observability.
+
+Unless otherwise specified, all non-functional requirements apply to every subsystem within Atlas.
+
+## NFR-001 Performance
+
+Priority:
+[MUST]
+
+Requirements
+
+The application shall prioritize responsiveness.
+
+Dashboard initial load time should target less than 2 seconds under normal network conditions.
+
+Page transitions should feel instantaneous whenever possible.
+
+The Morning Brief should render within 3 seconds after all required data has been collected.
+
+Long-running operations shall display visible progress indicators.
+
+The application shall avoid unnecessary network requests.
+
+Expensive computations should execute on backend services rather than user devices whenever practical.
+
+## NFR-002 Reliability
+
+Priority:
+[MUST]
+
+Requirements
+
+Atlas shall continue operating when non-critical services fail.
+
+Failures in one subsystem shall not crash unrelated functionality.
+
+Temporary failures from external APIs shall be retried when appropriate.
+
+If data cannot be retrieved, Atlas shall communicate this clearly to the user.
+
+Atlas shall fail gracefully.
+
+The application shall never display raw exception messages to end users.
+
+## NFR-003 Security
+
+Priority:
+[MUST]
+
+Requirements
+
+Passwords shall never be stored in plaintext.
+
+Sensitive credentials shall never exist within frontend source code.
+
+All secrets shall be stored using secure environment variables.
+
+All communication shall occur over encrypted HTTPS connections.
+
+Authentication shall require secure session management.
+
+Atlas shall follow the principle of least privilege.
+
+Only authorized users shall access portfolio data.
+
+
+## NFR-004 Privacy
+
+Priority:
+[MUST]
+
+Requirements
+
+Users own their data.
+
+Atlas shall collect only information necessary to provide requested functionality.
+
+AI conversations containing portfolio information shall be handled securely.
+
+Users shall be able to delete their accounts.
+
+Users shall be able to delete their stored portfolio information.
+
+Atlas shall clearly distinguish between user-generated information and AI-generated content.
+
+## NFR-005 Explainability
+
+Priority:
+[MUST]
+
+Requirements
+
+Atlas shall explain why important Insights appear.
+
+Whenever practical, Insights shall reference supporting evidence.
+
+The AI shall distinguish:
+
+Facts
+
+Inference
+
+Opinion
+
+Educational explanation
+
+Whenever confidence is limited, Atlas shall communicate uncertainty.
+
+Users should understand why Atlas reached a conclusion.
+
+
+## NFR-006 Scalability
+
+Priority:
+[SHOULD]
+
+Requirements
+
+Atlas should support increasing numbers of users without requiring architectural redesign.
+
+Subsystems should remain modular.
+
+External services should be replaceable.
+
+Business logic should remain independent of UI implementation.
+
+The system should support horizontal scaling where practical.
+
+
+## NFR-007 Maintainability
+
+Priority:
+[MUST]
+
+Requirements
+
+Code shall remain modular.
+
+Business logic shall remain separated from presentation logic.
+
+Functions should have a single responsibility.
+
+Components should remain reusable.
+
+Documentation shall remain synchronized with implementation.
+
+Technical debt shall be tracked rather than ignored.
+
+## NFR-008 Accessibility
+
+Priority:
+[SHOULD]
+
+Requirements
+
+Atlas should remain usable by individuals using keyboard navigation.
+
+Interactive elements should include accessible labels.
+
+Color shall never be the sole indicator of important information.
+
+Readable typography shall be prioritized.
+
+Dark mode and light mode should both remain fully supported.
+
+## NFR-009 Observability
+
+Priority:
+[SHOULD]
+
+Requirements
+
+Atlas should log important backend events.
+
+Errors should include sufficient diagnostic information for developers.
+
+Performance metrics should be measurable.
+
+Critical failures should be detectable.
+
+Monitoring should distinguish between application errors and external service failures.
+
+## NFR-010 AI Behavior
+
+Priority:
+[MUST]
+
+Requirements
+
+The AI shall never fabricate market data.
+
+The AI shall distinguish facts from generated explanations.
+
+The AI shall acknowledge uncertainty when appropriate.
+
+The AI shall avoid presenting speculation as certainty.
+
+The AI shall never imply access to information it does not possess.
+
+The AI shall provide educational explanations whenever beneficial.
+
+## NFR-011 Engineering Standards
+
+Priority:
+[MUST]
+
+Requirements
+
+Every feature shall be traceable to a documented functional requirement.
+
+Every pull request should reference the relevant requirement IDs.
+
+Code reviews should verify architectural consistency.
+
+Documentation shall be updated before or alongside implementation.
+
+Breaking architectural changes shall require corresponding SDS updates.
+
+# 17. System Context
+
+## Purpose
+
+The System Context defines the external actors and systems that interact with Atlas.
+
+It establishes the boundaries of the platform and identifies the flow of information between Atlas and third-party services.
+
+Atlas should remain loosely coupled to external providers whenever practical.
+
+External integrations should be replaceable without requiring significant changes to the core platform.
+
+## External Actors
+
+Atlas interacts with the following external actors:
+
+• Investors (Users)
+
+• Market Data Providers
+
+• Financial News Providers
+
+• AI Providers
+
+• Authentication Providers
+
+• Email Providers
+
+• Notification Providers
+
+• Analytics Providers
+
+Each external actor communicates with Atlas through clearly defined interfaces.
+
+
+## The User: Investor
+
+Role
+
+Primary user of the platform.
+
+Responsibilities
+
+Create an account.
+
+Manage portfolio.
+
+Read Insights.
+
+Interact with Atlas AI.
+
+Receive Morning Briefs.
+
+Manage preferences.
+
+Atlas Responsibilities
+
+Provide personalized intelligence.
+
+Protect user data.
+
+Deliver understandable financial information.
+
+Adapt over time.
+
+## Market Data Provider
+
+Responsibilities
+
+Provide:
+
+Security prices
+
+Historical prices
+
+Company metadata
+
+Market status
+
+Trading calendars
+
+Volume
+
+Index information
+
+Requirements
+
+Atlas shall remain provider-agnostic.
+
+Changing providers should require minimal architectural changes.
+
+Market data shall never be tightly coupled to business logic.
+
+## Financial News Provider
+
+Responsibilities
+
+Provide:
+
+Breaking news
+
+Company news
+
+Economic news
+
+Press releases
+
+News metadata
+
+Requirements
+
+News shall enter Atlas only as raw events.
+
+News presentation shall always pass through the Atlas Intelligence Engine.
+
+Duplicate stories should be consolidated whenever possible.
+
+
+## AI Provider
+
+Responsibilities
+
+Generate natural language.
+
+Summarize information.
+
+Answer questions.
+
+Explain financial concepts.
+
+Generate educational content.
+
+Requirements
+
+Atlas shall own all orchestration logic.
+
+The AI provider should never become the primary source of business logic.
+
+Atlas shall remain capable of replacing AI providers with minimal architectural impact.
+
+
+## Authentication Provider
+
+Responsibilities
+
+User registration.
+
+Identity verification.
+
+Secure authentication.
+
+Session management.
+
+Requirements
+
+Authentication should remain isolated from business logic.
+
+Portfolio services shall trust authenticated identities rather than perform authentication themselves.
+
+## Notification Provider
+
+Responsibilities
+
+Deliver:
+
+Push notifications
+
+Email notifications
+
+System alerts
+
+Requirements
+
+Notification providers shall deliver messages only.
+
+Notification providers shall never determine notification priority.
+
+Priority decisions belong exclusively to the Atlas Decision Engine.
+
+## Email Provider
+
+Responsibilities
+
+Verification emails.
+
+Password reset.
+
+Weekly summaries.
+
+Account notifications.
+
+Requirements
+
+Email templates shall remain version controlled.
+
+Business logic shall never exist inside email templates.
+
+## Analytics Provider
+
+Responsibilities
+
+Collect anonymous usage metrics.
+
+Monitor application health.
+
+Track feature adoption.
+
+Requirements
+
+Analytics shall never expose personally identifiable investment information.
+
+Privacy preferences shall be respected.
+
+## System Context Diagram
+
+                           Investor
+                               │
+                               │
+                               ▼
+                    ┌────────────────────┐
+                    │       Atlas        │
+                    │                    │
+                    │  Intelligence      │
+                    │      Engine        │
+                    └────────────────────┘
+        ┌──────────────┼───────────────┼──────────────┐
+        ▼              ▼               ▼              ▼
+ Market Data      Financial News    AI Provider   Auth Provider
+ Provider           Provider
+
+        ▼              ▼               ▼              ▼
+        └──────────────┴───────────────┴──────────────┘
+
+                 Email Provider
+                 Notification Provider
+                 Analytics Provider
+
+ 
+Notice something?
+Every arrow goes into the Atlas Intelligence Engine.
+Nothing talks directly to anything else.
+Thats Intentional.
+The AI never calls the market data provider.
+The notification system never decides whats important. 
+The frontend never talks directly to the new provider.
+EVERYTHING FLOWS THROUGH ATLAS.
+Thats a clean architecture.
+
+
+
+# 18. High-Level System Architecture
+
+## Purpose
+
+This chapter defines the major architectural layers of Atlas and the responsibilities assigned to each layer.
+
+Atlas follows a layered architecture designed to maximize maintainability, scalability, modularity, and testability.
+
+Each layer has clearly defined responsibilities and communicates only through well-defined interfaces.
+
+Business logic shall remain centralized within the Atlas platform.
+
+Presentation logic shall remain isolated from business logic.
+
+External providers shall never become tightly coupled to the internal architecture.
+
+## Architectural Philosophy
+
+Atlas is built around the principle of separation of concerns.
+
+Each architectural layer owns a single area of responsibility.
+
+Layers should remain loosely coupled and highly cohesive.
+
+Communication between layers should occur through clearly defined interfaces.
+
+No layer should depend on implementation details of another layer.
+
+The architecture should allow individual layers to evolve independently whenever practical.
+
+## Layer 1 — Presentation Layer
+
+Purpose
+
+Provide the user interface through which investors interact with Atlas.
+
+Responsibilities
+
+Display dashboards.
+
+Display Morning Briefs.
+
+Display Insights.
+
+Display portfolio information.
+
+Collect user input.
+
+Display AI conversations.
+
+Display notifications.
+
+The Presentation Layer contains no business logic.
+
+It requests information from the Application Layer and renders it for the user.
+
+## Layer 2 — Application Layer
+
+Purpose
+
+Coordinate application workflows.
+
+Responsibilities
+
+Receive user requests.
+
+Validate input.
+
+Coordinate services.
+
+Manage user sessions.
+
+Invoke Intelligence Engine workflows.
+
+Return responses to the Presentation Layer.
+
+The Application Layer coordinates behavior but should avoid implementing complex business rules directly.
+
+## Layer 3 — Intelligence Layer
+
+Purpose
+
+Transform financial information into personalized investor intelligence.
+
+Components
+
+Atlas Intelligence Engine (AIE)
+
+Atlas Decision Engine (ADE)
+
+Atlas Context Engine (ACE)
+
+Atlas Personalization Engine (APE)
+
+Atlas Risk Engine (ARE)
+
+Atlas Learning Engine (ALE)
+
+Atlas Memory Graph (AMG)
+
+Atlas Reasoning Engine (ARgE)
+
+Responsibilities
+
+Rank events.
+
+Generate Insights.
+
+Provide explanations.
+
+Evaluate portfolio relevance.
+
+Generate Morning Briefs.
+
+Prioritize alerts.
+
+Support AI conversations.
+
+This layer contains the core business logic of Atlas.
+
+## Layer 4 — Data Layer
+
+Purpose
+
+Store and retrieve persistent application data.
+
+Examples:
+
+Users
+
+Portfolios
+
+Holdings
+
+Insights
+
+Morning Briefs
+
+Learning Records
+
+Memory Graph
+
+Notifications
+
+Preferences
+
+Responsibilities
+
+Persist application state.
+
+Support querying.
+
+Maintain historical records.
+
+Enforce data integrity.
+
+## Layer 5 — Integration Layer
+
+Purpose
+
+Communicate with external systems.
+
+Responsibilities
+
+Retrieve market data.
+
+Retrieve financial news.
+
+Communicate with AI providers.
+
+Send emails.
+
+Deliver notifications.
+
+Authenticate users.
+
+Collect analytics.
+
+Normalize external data.
+
+Shield internal systems from provider-specific implementations.
+
+## Layer 6 — Infrastructure Layer
+
+Purpose
+
+Provide the operational environment required to run Atlas.
+
+Responsibilities
+
+Hosting.
+
+Deployment.
+
+Monitoring.
+
+Logging.
+
+Scaling.
+
+Secrets management.
+
+Backups.
+
+Disaster recovery.
+
+Infrastructure concerns shall remain isolated from business logic.
+
+THE ENTIRE ARCHITECTURE
+
+                    ┌───────────────────────┐
+                    │     Presentation      │
+                    │        Layer          │
+                    └───────────┬───────────┘
+                                │
+                                ▼
+                    ┌───────────────────────┐
+                    │      Application      │
+                    │        Layer          │
+                    └───────────┬───────────┘
+                                │
+                                ▼
+                    ┌───────────────────────┐
+                    │     Intelligence      │
+                    │        Layer          │
+                    └───────────┬───────────┘
+                                │
+              ┌─────────────────┴─────────────────┐
+              ▼                                   ▼
+      ┌──────────────┐                  ┌────────────────┐
+      │  Data Layer  │                  │ Integration    │
+      │              │                  │     Layer      │
+      └──────┬───────┘                  └────────┬───────┘
+             │                                   │
+             └──────────────┬────────────────────┘
+                            ▼
+                ┌───────────────────────┐
+                │ Infrastructure Layer  │
+                └───────────────────────┘
+
+DATA FLOW:
+Market Event
+
+↓
+
+Integration Layer
+
+↓
+
+Application Layer
+
+↓
+
+Atlas Intelligence Engine
+
+↓
+
+Decision Engine
+
+↓
+
+Context Engine
+
+↓
+
+Reasoning Engine
+
+↓
+
+Insight
+
+↓
+
+Database
+
+↓
+
+Presentation Layer
+
+↓
+
+Investor
+
+## Architectural Constraints
+
+The following constraints are mandatory.
+
+Presentation components shall never directly query external providers.
+
+Business logic shall never execute inside UI components.
+
+The Intelligence Layer shall remain independent of UI technologies.
+
+External providers shall be replaceable.
+
+Subsystems shall communicate through defined interfaces.
+
+Persistent data shall be stored only within the Data Layer.
+
+AI providers shall never become the source of truth for application state.
+
+All user-facing intelligence shall originate from the Atlas Intelligence Engine.
 
