@@ -2525,3 +2525,347 @@ AI providers shall never become the source of truth for application state.
 
 All user-facing intelligence shall originate from the Atlas Intelligence Engine.
 
+
+# 19. Architectural Decision Records (ADR)
+
+## Purpose
+
+Architectural Decision Records (ADRs) document significant technical decisions made during the design and evolution of Atlas.
+
+Each ADR captures:
+
+- The context surrounding the decision.
+- The decision itself.
+- The rationale behind the decision.
+- The consequences of adopting the decision.
+
+ADRs provide a historical record that helps maintain architectural consistency as Atlas evolves.
+
+All significant architectural changes should be documented with a new ADR rather than modifying existing records.
+
+
+# ADR-001
+
+Title
+
+Atlas shall use a layered architecture.
+
+Status
+
+Accepted
+
+Context
+
+Atlas will grow to include multiple intelligence systems, external integrations, and user-facing applications.
+
+Without architectural boundaries, business logic could become tightly coupled to presentation and infrastructure concerns.
+
+Decision
+
+Atlas shall separate responsibilities into the following layers:
+
+Presentation Layer
+
+Application Layer
+
+Intelligence Layer
+
+Data Layer
+
+Integration Layer
+
+Infrastructure Layer
+
+Rationale
+
+Layered architectures improve maintainability, scalability, testing, and long-term flexibility.
+
+Consequences
+
+Clear separation of responsibilities.
+
+Improved testability.
+
+Simplified future expansion.
+
+Slight increase in architectural complexity.
+
+# ADR-002
+
+Title
+
+All user-facing intelligence shall originate from the Atlas Intelligence Engine.
+
+Status
+
+Accepted
+
+Context
+
+Traditional financial applications expose raw information directly to users.
+
+Atlas seeks to reduce information overload through intelligent filtering and explanation.
+
+Decision
+
+Every Market Event shall pass through the Atlas Intelligence Engine before reaching users.
+
+No user-facing intelligence bypasses the AIE.
+
+Rationale
+
+Creates a consistent user experience.
+
+Enables personalization.
+
+Supports explainability.
+
+Reduces information overload.
+
+Consequences
+
+Additional processing requirements.
+
+Higher implementation complexity.
+
+Significantly greater long-term product differentiation.
+
+# ADR-003
+
+Title
+
+External providers shall remain replaceable.
+
+Status
+
+Accepted
+
+Context
+
+Atlas depends on external services for AI, market data, authentication, and notifications.
+
+Provider APIs change over time.
+
+Business requirements may also change.
+
+Decision
+
+All external providers shall communicate through adapter interfaces.
+
+Core business logic shall never depend directly upon provider implementations.
+
+Rationale
+
+Reduces vendor lock-in.
+
+Simplifies migrations.
+
+Improves maintainability.
+
+Consequences
+
+Additional abstraction layers.
+
+Lower long-term migration costs.
+
+# ADR-004
+
+Title
+
+Insights are the primary product output.
+
+Status
+
+Accepted
+
+Context
+
+Financial applications often present raw data, charts, or news articles.
+
+Atlas exists to transform information into understanding.
+
+Decision
+
+The primary output of Atlas shall be personalized Insights.
+
+Morning Briefs, dashboards, alerts, and AI conversations shall consume Insights rather than raw market events.
+
+Rationale
+
+Separates facts from interpretation.
+
+Creates architectural consistency.
+
+Improves personalization.
+
+Supports future AI enhancements.
+
+Consequences
+
+Requires an Insight generation pipeline.
+
+Simplifies downstream user experiences.
+
+# ADR-005
+
+Title
+
+Artificial Intelligence is an implementation capability rather than the product itself.
+
+Status
+
+Accepted
+
+Context
+
+Large language models are evolving rapidly.
+
+Atlas should remain valuable regardless of future AI providers or models.
+
+Decision
+
+Business logic shall remain within Atlas.
+
+AI providers shall generate language and reasoning only when requested by Atlas.
+
+Rationale
+
+Protects long-term independence.
+
+Improves explainability.
+
+Reduces vendor dependency.
+
+Consequences
+
+Greater engineering effort.
+
+Improved architectural stability.
+
+# ADR-006
+
+Title
+
+Atlas prioritizes explainability over opaque outputs.
+
+Status
+
+Accepted
+
+Context
+
+Users are more likely to trust recommendations they can understand.
+
+Decision
+
+Whenever practical, Atlas shall explain:
+
+Why an Insight exists.
+
+Why it matters.
+
+Why it was shown.
+
+What evidence supports it.
+
+Rationale
+
+Builds trust.
+
+Supports learning.
+
+Encourages informed decision-making.
+
+Consequences
+
+Additional implementation effort.
+
+Greater user confidence.
+
+# ADR-007
+
+Title
+
+Users retain ownership and control of their data.
+
+Status
+
+Accepted
+
+Context
+
+Atlas processes sensitive financial information.
+
+Decision
+
+Users shall be able to export and delete their personal data.
+
+Atlas shall minimize unnecessary data collection.
+
+Rationale
+
+Supports user trust.
+
+Improves privacy.
+
+Aligns with modern data protection principles.
+
+Consequences
+
+Additional engineering effort for export and deletion workflows.
+
+Improved transparency and user confidence.
+
+# ADR-008
+
+Title
+
+Documentation is treated as a core product asset.
+
+Status
+
+Accepted
+
+Context
+
+Atlas is expected to evolve over many years with contributions from multiple engineers.
+
+Decision
+
+The Software Design Specification (SDS) shall remain the authoritative reference for architecture and system behavior.
+
+Architectural changes shall be documented before or alongside implementation.
+
+Rationale
+
+Reduces onboarding time.
+
+Improves consistency.
+
+Preserves architectural intent.
+
+Consequences
+
+Additional documentation effort.
+
+Higher long-term development velocity.
+
+Lower architectural drift.
+
+## ADR Principles
+
+Architectural Decision Records are immutable historical documents.
+
+Existing ADRs should not be rewritten to reflect newer decisions.
+
+If an architectural decision changes, a new ADR shall be created that supersedes the previous record while preserving its history.
+
+Every ADR should include:
+
+- Unique identifier
+- Title
+- Status
+- Context
+- Decision
+- Rationale
+- Consequences
