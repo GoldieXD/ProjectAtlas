@@ -2869,3 +2869,686 @@ Every ADR should include:
 - Decision
 - Rationale
 - Consequences
+
+
+# 20. Minimum Viable Product (MVP) Scope
+
+## Purpose
+
+This chapter defines the complete scope of Atlas Version 1.0.
+
+The MVP exists to validate the core hypothesis:
+
+"Investors will consistently use Atlas if it transforms financial information into personalized intelligence."
+
+Every feature included in the MVP must directly support this hypothesis.
+
+Features that do not contribute to validating the hypothesis are intentionally excluded.
+
+## MVP Goals
+
+Version 1.0 must allow a user to:
+
+• Create an account.
+
+• Build a portfolio.
+
+• Build a watchlist.
+
+• Receive personalized Insights.
+
+• Receive a Morning Brief.
+
+• Ask AI questions about the market and their portfolio.
+
+• Understand why important events matter.
+
+• Return to Atlas daily.
+
+## Included Features
+
+### Authentication
+[MUST]
+
+✓ Account Registration
+
+✓ Login
+
+✓ Logout
+
+✓ Password Reset
+
+✓ Email Verification
+
+---
+
+### Portfolio
+[MUST]
+
+✓ Add Holdings
+
+✓ Edit Holdings
+
+✓ Delete Holdings
+
+✓ Portfolio Performance
+
+✓ Gain/Loss
+
+✓ Allocation Overview
+
+---
+
+### Watchlist
+[MUST]
+
+✓ Add Securities
+
+✓ Remove Securities
+
+✓ Search Securities
+
+✓ View Watchlist
+
+---
+
+### Dashboard
+[MUST]
+
+✓ Portfolio Summary
+
+✓ Today's Morning Brief
+
+✓ Top Insights
+
+✓ Upcoming Earnings
+
+✓ Upcoming Economic Events
+
+✓ Recent Alerts
+
+---
+
+### Morning Brief
+[MUST]
+
+✓ Daily Summary
+
+✓ Portfolio Update
+
+✓ Top Market Events
+
+✓ Highest Priority Insights
+
+✓ Risks
+
+✓ Opportunities
+
+✓ Learning Moment
+
+---
+
+### Insights
+[MUST]
+
+✓ Personalized
+
+✓ Ranked
+
+✓ Explainable
+
+✓ Linked to Sources
+
+✓ Related Holdings
+
+✓ Confidence Score
+
+---
+
+### AI Assistant
+[MUST]
+
+✓ Explain News
+
+✓ Explain Holdings
+
+✓ Explain Concepts
+
+✓ Explain Market Events
+
+✓ Answer Questions
+
+✓ Reference Portfolio
+
+---
+
+### Decision Engine
+[MUST]
+
+✓ Event Ranking
+
+✓ Priority Scoring
+
+✓ Portfolio Relevance
+
+✓ Watchlist Relevance
+
+✓ Dashboard Selection
+
+✓ Morning Brief Selection
+
+---
+
+### Search
+[MUST]
+
+✓ Search Companies
+
+✓ Search Tickers
+
+✓ Open Company Page
+
+---
+
+### Company Page
+[MUST]
+
+✓ Price
+
+✓ Company Overview
+
+✓ Recent News
+
+✓ Related Insights
+
+✓ AI Summary
+
+## Excluded from Version 1.0
+
+The following features shall not be implemented during MVP development.
+
+• Broker Integration
+
+• Automatic Trade Import
+
+• Trading
+
+• Buy/Sell Recommendations
+
+• Social Features
+
+• Copy Trading
+
+• Community Discussions
+
+• Paper Trading
+
+• Crypto Wallets
+
+• Desktop Application
+
+• Native Mobile Applications
+
+• Advanced Learning Engine
+
+• Atlas Memory Graph
+
+• Advanced Risk Engine
+
+• Voice Conversations
+
+• Autonomous AI Agents
+
+• Plugin System
+
+• Custom Automations
+
+• Options Analytics
+
+• Tax Reporting
+
+## Success Criteria
+
+The MVP is considered successful if users:
+
+Understand the product within five minutes.
+
+Return multiple times per week.
+
+Read the Morning Brief.
+
+Ask AI questions.
+
+Receive value from personalized Insights.
+
+Report that Atlas helps reduce information overload.
+
+## Deferred Engineering
+
+The MVP prioritizes validation over optimization.
+
+The following concerns may be addressed after validation:
+
+Microservice decomposition
+
+Advanced caching
+
+Horizontal scaling
+
+Complex event processing
+
+Provider redundancy
+
+High-availability deployment
+
+Enterprise monitoring
+
+Performance optimization beyond MVP targets
+
+# 21. Technology Stack
+
+## Purpose
+
+This chapter defines the approved technologies for Atlas Version 1.0.
+
+Technology selections prioritize developer productivity, maintainability, ecosystem maturity, and AI-assisted development compatibility.
+
+The stack may evolve in future versions through documented architectural decisions.
+
+Backend
+
+Framework
+
+Next.js Route Handlers (initial)
+
+Language
+
+TypeScript
+
+ORM
+
+Prisma
+
+Validation
+
+Zod
+
+Authentication
+
+Clerk or Supabase Auth
+
+Background Jobs
+
+Trigger.dev (or equivalent)
+
+API Style
+
+REST for MVP
+
+Database
+
+PostgreSQL
+
+Hosted by Supabase
+
+AI
+
+Primary LLM
+
+OpenAI
+
+Prompt Management
+
+Version Controlled
+
+Structured Outputs
+
+JSON where practical
+
+Reasoning
+
+Controlled by Atlas Intelligence Engine
+
+Market Data
+
+Primary Provider
+
+(To be selected during implementation)
+
+Requirements
+
+US equities
+
+Company metadata
+
+Historical prices
+
+Market status
+
+Economic calendar
+
+News access (or paired provider)
+
+Hosting
+
+Vercel
+
+Database
+
+Supabase
+
+Repository
+
+GitHub
+
+CI/CD
+
+GitHub Actions
+
+Development Principles
+
+Type safety first.
+
+Small pull requests.
+
+Test critical logic.
+
+Document architectural changes.
+
+Never bypass the Atlas Intelligence Engine.
+
+Maintain a clean Git history.
+
+Prefer readability over cleverness.
+
+# 22. Development Roadmap
+
+## Philosophy
+
+Atlas shall be built incrementally.
+
+Each milestone should produce a working application.
+
+Every milestone should be testable before beginning the next.
+
+No milestone should depend on unfinished future functionality.
+
+Milestone 1
+
+Project initialization
+
+GitHub repository
+
+Next.js project
+
+TypeScript configuration
+
+Tailwind setup
+
+shadcn/ui installation
+
+Prisma configuration
+
+Supabase connection
+
+Authentication
+
+Basic layout
+
+Deployment pipeline
+
+Milestone 2
+
+Portfolio CRUD
+
+Watchlist CRUD
+
+Database models
+
+Dashboard widgets
+
+Portfolio calculations
+
+Company search
+
+Milestone 3
+
+Market event ingestion
+
+News ingestion
+
+Basic Decision Engine
+
+Insight generation
+
+Insight storage
+
+Dashboard integration
+
+Milestone 4
+
+Morning Brief generation
+
+Dashboard integration
+
+Daily summaries
+
+Economic calendar
+
+Earnings integration
+
+Milestone 5
+
+AI assistant
+
+Context-aware prompts
+
+Portfolio awareness
+
+Insight explanations
+
+Educational responses
+
+Milestone 6
+
+Bug fixing
+
+Performance improvements
+
+UI polish
+
+Accessibility review
+
+Testing
+
+Private alpha release
+
+Feedback collection
+
+# 23. Implementation Guide
+
+## Purpose
+
+This chapter defines the engineering workflow for implementing Atlas.
+
+It establishes the standards, expectations, and development process for both human developers and AI coding assistants.
+
+The Software Design Specification (SDS) is the authoritative reference for Atlas Version 1.0.
+
+Implementation shall follow the SDS unless an approved Architectural Decision Record (ADR) supersedes it.
+
+## Guiding Principles
+
+1. Build one milestone at a time.
+
+2. Keep the application functional after every milestone.
+
+3. Do not implement future milestones early.
+
+4. Prefer simple, maintainable solutions over clever implementations.
+
+5. Optimize for readability before optimization.
+
+6. Every implementation decision should support the Atlas Doctrine.
+
+7. The SDS is the source of truth.
+
+## AI Coding Assistant Instructions
+
+When implementing Atlas:
+
+Read the SDS before beginning work.
+
+Do not invent features that are not documented.
+
+Do not expand project scope without approval.
+
+If requirements are ambiguous, request clarification rather than making assumptions.
+
+Complete one milestone before beginning another.
+
+Generate maintainable, production-quality code.
+
+Avoid unnecessary abstraction.
+
+Avoid premature optimization.
+
+Follow existing project conventions.
+
+Preserve architectural boundaries defined within the SDS.
+
+## Engineering Standards
+
+Every pull request should:
+
+Reference the milestone being implemented.
+
+Remain focused on a single objective.
+
+Compile successfully.
+
+Avoid unrelated refactoring.
+
+Update documentation when architectural behavior changes.
+
+Leave the project in a working state.
+
+## Code Quality
+
+Code should be:
+
+Readable
+
+Predictable
+
+Modular
+
+Type-safe
+
+Well documented where necessary
+
+Consistent with existing architecture
+
+Business logic should remain isolated from presentation logic.
+
+Magic numbers and unexplained constants should be avoided.
+
+Functions should have a single responsibility whenever practical.
+
+## Testing
+
+Critical business logic shall be tested.
+
+Examples include:
+
+Decision Engine scoring
+
+Portfolio calculations
+
+Insight generation
+
+Morning Brief generation
+
+Authentication flows
+
+Regression tests should be added for resolved defects when practical.
+
+UI implementation details should not be over-tested.
+
+Tests should focus on behavior rather than implementation.
+
+## Git Workflow
+
+Primary Branch
+
+main
+
+Development Branch
+
+develop
+
+Feature Branch Naming
+
+feature/<short-description>
+
+Bug Fix Branch Naming
+
+fix/<short-description>
+
+Commit Messages
+
+Use concise, descriptive commit messages.
+
+Examples:
+
+feat: add portfolio dashboard
+
+fix: correct gain calculation
+
+refactor: simplify insight ranking
+
+docs: update SDS
+
+## Definition of Done
+
+A task is complete when:
+
+The implementation satisfies the documented requirement.
+
+The application builds successfully.
+
+Relevant tests pass.
+
+Documentation is updated if required.
+
+No known critical defects remain.
+
+The feature integrates cleanly with the existing architecture.
+
+## Engineering Philosophy
+
+Atlas should remain understandable.
+
+Future contributors should be able to understand a subsystem without reading the entire codebase.
+
+Every subsystem should have a clearly defined responsibility.
+
+Complexity should emerge only when justified by measurable value.
+
+The codebase should be easier to understand after every milestone rather than more difficult.
+
+## Closing Statement
+
+Atlas is built on the belief that clarity creates confidence.
+
+Every architectural decision, feature, and engineering choice should contribute to helping investors understand what matters.
+
+The goal of Atlas is not to present more information.
+
+The goal of Atlas is to transform information into understanding.
+
+This document defines Version 1.0 of the Atlas Software Design Specification.
+
+Future evolution of the platform should build upon these principles while remaining open to new evidence, user feedback, and better ideas.
+
+
