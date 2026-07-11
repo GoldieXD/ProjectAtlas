@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                           String            @id @default(cuid())
+  email                        String            @unique
+  name                         String?
+  investingGoal                String?
+  experienceLevel              ExperienceLevel   @default(BEGINNER)
+  dailyTimeCommitmentMinutes   Int               @default(5)
+  createdAt                    DateTime          @default(now())
+  updatedAt                    DateTime          @updatedAt
+  holdings                     Holding[]
+  watchlistItems               WatchlistItem[]
+  insights                     Insight[]
+  morningBriefs                MorningBrief[]
+}
+
+model Holding {
+  id           String   @id @default(cuid())
+  userId       String
+  ticker       String
+  name         String
+  quantity     Decimal
+  averageCost  Decimal
+  currentPrice Decimal
+  sector       String
+  assetType    AssetType
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([ticker])
+}
+
+model WatchlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  ticker    String
+  name      String
+  sector    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, ticker])
+  @@index([ticker])
+}
+
+model MarketEvent {
+  id               String      @id @default(cuid())
+  title            String
+  summary          String
+  type             EventType
+  tickers          String[]
+  sector           String?
+  sourceName       String
+  sourceUrl        String?
+  publishedAt      DateTime
+  marketImportance Int
+  createdAt        DateTime    @default(now())
+  insights         Insight[]
+}
+
+model Insight {
+  id              String          @id @default(cuid())
+  userId          String
+  marketEventId   String?
+  title           String
+  summary         String
+  explanation     String
+  importanceScore Int
+  confidence      ConfidenceLevel
+  reasonShown     String
+  relatedTickers  String[]
+  sourceName      String
+  sourceUrl       String?
+  generatedAt     DateTime        @default(now())
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  marketEvent     MarketEvent?    @relation(fields: [marketEventId], references: [id], onDelete: SetNull)
+
+  @@index([userId, importanceScore])
+}
+
+model MorningBrief {
+  id              String   @id @default(cuid())
+  userId          String
+  portfolioUpdate String
+  risks           String[]
+  opportunities   String[]
+  learningMoment  String
+  generatedAt     DateTime @default(now())
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, generatedAt])
+}
+
+enum ExperienceLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+enum AssetType {
+  STOCK
+  ETF
+  FUND
+}
+
+enum EventType {
+  EARNINGS
+  ECONOMIC
+  NEWS
+  ANALYST
+  DIVIDEND
+}
+
+enum ConfidenceLevel {
+  LOW
+  MEDIUM
+  HIGH
+}

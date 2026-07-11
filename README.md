@@ -23,7 +23,7 @@ Frontend
 - Tailwind CSS
 
 Backend
-- Python
+- Next.js Route Handlers for MVP
 - Supabase
 - PostgreSQL
 
@@ -31,7 +31,7 @@ AI
 - OpenAI API
 
 Deployment
-- Vercel+
+- Vercel
 
 An AI-powered investment operating system.
 
