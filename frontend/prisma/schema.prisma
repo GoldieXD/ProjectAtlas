@@ -1,0 +1,229 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ExperienceLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum RiskTolerance {
+  LOW
+  MODERATE
+  HIGH
+}
+
+enum AssetType {
+  STOCK
+  ETF
+  FUND
+  CRYPTO
+  OTHER
+}
+
+enum EventCategory {
+  EARNINGS
+  MACRO
+  ANALYST_ACTION
+  DIVIDEND
+  SEC_FILING
+  NEWS
+  PRODUCT
+  MERGER
+  RISK
+}
+
+enum InsightVisibility {
+  HIDDEN
+  DASHBOARD
+  BRIEF
+  ALERT
+}
+
+model User {
+  id                         String                   @id @default(cuid())
+  email                      String                   @unique
+  displayName                String?
+  experienceLevel            ExperienceLevel          @default(BEGINNER)
+  riskTolerance              RiskTolerance            @default(MODERATE)
+  preferredExplanationDepth  String                   @default("BALANCED")
+  goals                      String[]                 @default([])
+  createdAt                  DateTime                 @default(now())
+  updatedAt                  DateTime                 @updatedAt
+  portfolios                 Portfolio[]
+  watchlists                 Watchlist[]
+  insights                   Insight[]
+  morningBriefs              MorningBrief[]
+  learningRecords            LearningRecord[]
+  memoryNodes                MemoryNode[]
+  notificationPreferences    NotificationPreference[]
+}
+
+model Portfolio {
+  id          String    @id @default(cuid())
+  userId      String
+  name        String
+  cashBalance Decimal   @default(0) @db.Decimal(18, 4)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  holdings    Holding[]
+
+  @@index([userId])
+}
+
+model Holding {
+  id             String    @id @default(cuid())
+  portfolioId    String
+  symbol         String
+  companyName    String
+  quantity       Decimal   @db.Decimal(18, 6)
+  averageCost    Decimal   @db.Decimal(18, 6)
+  currentPrice   Decimal   @default(0) @db.Decimal(18, 6)
+  sector         String
+  assetType      AssetType @default(STOCK)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  portfolio      Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  @@unique([portfolioId, symbol])
+  @@index([symbol])
+}
+
+model Watchlist {
+  id        String          @id @default(cuid())
+  userId    String
+  name      String
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     WatchlistItem[]
+
+  @@index([userId])
+}
+
+model WatchlistItem {
+  id           String    @id @default(cuid())
+  watchlistId  String
+  symbol       String
+  companyName  String
+  sortOrder    Int       @default(0)
+  createdAt    DateTime  @default(now())
+  watchlist    Watchlist @relation(fields: [watchlistId], references: [id], onDelete: Cascade)
+
+  @@unique([watchlistId, symbol])
+  @@index([symbol])
+}
+
+model MarketEvent {
+  id             String        @id @default(cuid())
+  symbol         String?
+  category       EventCategory
+  headline       String
+  summary        String
+  sourceProvider String
+  sourceUrl      String
+  occurredAt     DateTime
+  marketImpact   Float
+  confidence     Float
+  createdAt      DateTime      @default(now())
+  insights       Insight[]
+
+  @@index([symbol, occurredAt])
+  @@index([category, occurredAt])
+}
+
+model Insight {
+  id              String            @id @default(cuid())
+  userId          String
+  marketEventId   String?
+  title           String
+  summary         String
+  explanation     String
+  category        EventCategory
+  importanceScore Int
+  confidenceScore Int
+  visibility      InsightVisibility @default(DASHBOARD)
+  relatedSymbols  String[]          @default([])
+  rationale       String[]          @default([])
+  createdAt       DateTime          @default(now())
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  marketEvent     MarketEvent?      @relation(fields: [marketEventId], references: [id], onDelete: SetNull)
+  sources         Source[]
+
+  @@index([userId, importanceScore])
+  @@index([userId, createdAt])
+}
+
+model Source {
+  id        String   @id @default(cuid())
+  insightId String
+  title     String
+  provider  String
+  url       String
+  createdAt DateTime @default(now())
+  insight   Insight  @relation(fields: [insightId], references: [id], onDelete: Cascade)
+}
+
+model MorningBrief {
+  id               String   @id @default(cuid())
+  userId           String
+  briefDate        DateTime @db.Date
+  marketSummary    String
+  portfolioSummary String
+  risks            String[] @default([])
+  opportunities    String[] @default([])
+  learningMoment   String
+  readTimeMinutes  Int
+  createdAt        DateTime @default(now())
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, briefDate])
+}
+
+model LearningRecord {
+  id              String   @id @default(cuid())
+  userId          String
+  concept         String
+  confidenceScore Float    @default(0)
+  lastReviewedAt  DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, concept])
+}
+
+model MemoryNode {
+  id        String   @id @default(cuid())
+  userId    String
+  key       String
+  value     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, key])
+}
+
+model NotificationPreference {
+  id        String   @id @default(cuid())
+  userId    String
+  category  String
+  channel   String
+  enabled   Boolean  @default(true)
+  threshold Int      @default(86)
+  quietFrom String?
+  quietTo   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, category, channel])
+}

@@ -39,7 +39,32 @@ Atlas V1 is built to validate the core hypothesis that investors will consistent
 
 ## Tech Stack
 
-- Frontend: Next.js, React, Tailwind CSS
-- Backend: Next.js Route Handlers, Supabase, PostgreSQL
+- Frontend: Next.js, React, accessible CSS foundation
+- Backend: Next.js Route Handlers, Supabase/PostgreSQL-ready Prisma schema
 - AI: OpenAI API
 - Deployment: Vercel
+
+## Current MVP Implementation
+
+The deployable app lives in `frontend/`. It implements the SDS layered architecture with presentation, application, intelligence, domain, data, and validation boundaries.
+
+### Run locally
+
+```powershell
+pnpm install
+pnpm --filter @atlas/frontend run dev
+```
+
+### Verify
+
+```powershell
+pnpm --filter @atlas/frontend run typecheck
+pnpm --filter @atlas/frontend run test
+pnpm --filter @atlas/frontend run build
+```
+
+### Architecture Handoff
+
+Read `docs/architecture.md` for the system architecture, file structure, database schema summary, API endpoints, UI architecture, and milestone coverage.
+
+The app currently uses demo adapters for auth context, market data, news, and AI responses. Production provider work should replace adapters without moving business logic into UI or provider-specific modules.

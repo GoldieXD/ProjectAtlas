@@ -1,0 +1,37 @@
+   ▲ Next.js 15.5.20
+   - Local:        http://127.0.0.1:3000
+   - Network:      http://127.0.0.1:3000
+
+ ✓ Starting...
+ ✓ Ready in 9.6s
+ ○ Compiling /api/health ...
+ ✓ Compiled /api/health in 12s (297 modules)
+ GET /api/health 200 in 13029ms
+ ○ Compiling / ...
+ ✓ Compiled / in 9.5s (623 modules)
+ GET / 200 in 10738ms
+ ○ Compiling /portfolio ...
+ ✓ Compiled /portfolio in 935ms (611 modules)
+ GET /portfolio 200 in 1210ms
+ GET /portfolio 200 in 180ms
+ GET /portfolio 200 in 69ms
+ ○ Compiling /insights ...
+ ✓ Compiled /insights in 637ms (613 modules)
+ GET /insights 200 in 990ms
+ ○ Compiling /search ...
+ ✓ Compiled /search in 4.9s (615 modules)
+ GET /search 200 in 5911ms
+ GET /search 200 in 1035ms
+ GET /search 200 in 520ms
+ ○ Compiling /assistant ...
+ ✓ Compiled /assistant in 4.7s (639 modules)
+ GET /assistant 200 in 5721ms
+ ○ Compiling /api/assistant ...
+ ✓ Compiled /api/assistant in 3.7s (668 modules)
+ POST /api/assistant 200 in 4385ms
+ POST /api/assistant 200 in 93ms
+ GET / 200 in 239ms
+ ○ Compiling /api/health ...
+ ✓ Compiled /api/health in 575ms (439 modules)
+ GET /api/health 200 in 825ms
+ GET / 200 in 778ms
