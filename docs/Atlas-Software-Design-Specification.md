@@ -1,1338 +1,686 @@
-# Atlas Software Design Specification
+# Atlas Software Design Specification (SDS)
 
-Version: 1.0.1
+Version: 1.0.0
 Status: Draft
 Project Codename: Atlas
 Owner: Goldie
+Technical Architect: OpenAI ChatGPT
 Created: July 5, 2026
-Last Updated: July 11, 2026
 
-## Purpose
+---
 
-This Software Design Specification (SDS) is the source of truth for Project Atlas. It defines the product vision, core requirements, architecture, MVP scope, engineering standards, and major architectural decisions.
+# Confidentiality and Authority
 
-When implementation and documentation disagree, update this SDS or add an Architectural Decision Record (ADR) before changing the system design.
+This document defines the architecture, product vision, engineering standards, and implementation boundaries for Project Atlas. It is the primary source of truth for design, development, testing, and future product decisions.
 
-AI coding assistants and human contributors should read this document before implementing features.
+When implementation and documentation conflict, update this SDS or create an approved Architectural Decision Record (ADR) before changing code. All AI coding agents and human contributors must read this document before implementing features.
 
-## Revision History
+---
+
+# Revision History
 
 | Version | Date | Author | Notes |
 | --- | --- | --- | --- |
 | 1.0.0 | July 5, 2026 | Goldie | Initial draft |
-| 1.0.1 | July 11, 2026 | Codex | Condensed and reorganized for readability |
 
-## Table of Contents
+---
 
-1. Product Overview
-2. Product Principles
-3. Success Metrics
-4. Target Users and Personas
-5. Investor Lifecycle
-6. Atlas Intelligence Architecture
-7. Domain Model
-8. Core User Flows
-9. Functional Requirements
-10. Non-Functional Requirements
-11. System Context
-12. High-Level Architecture
-13. Architectural Decision Records
-14. MVP Scope
-15. Technology Stack
-16. Development Roadmap
-17. Implementation Guide
+# Table of Contents
 
-## 1. Product Overview
+1. Executive Summary
+2. Problem Statement
+3. Product Vision
+4. Product Principles
+5. Success Metrics
+6. User Experience Philosophy
+7. Target Users
+8. User Personas
+9. Atlas Decision Engine
+10. Cognitive Architecture
+11. Investor Lifecycle
+12. Domain Model
+13. Core User Flows
+14. Functional Requirements
+15. Non-Functional Requirements
+16. System Context
+17. High-Level System Architecture
+18. Architectural Decision Records
+19. Minimum Viable Product Scope
+20. Technology Stack
+21. Development Roadmap
+22. Implementation Guide
 
-Atlas is an AI-powered investment operating system that helps investors understand financial markets quickly, confidently, and efficiently.
+---
 
-Modern investors are overwhelmed by market data, financial news, economic releases, analyst commentary, earnings announcements, social posts, and portfolio movements. Most tools deliver more information. Atlas exists to deliver understanding.
+# 1. Executive Summary
 
-Atlas continuously gathers relevant market information, filters noise, ranks importance, and produces personalized insights based on each user's portfolio, watchlist, goals, risk profile, and knowledge level.
+Atlas is an AI-powered Investment Operating System that helps investors understand financial markets quickly, confidently, and efficiently.
 
-The central user question is:
+Modern investors face constant information overload from news, analyst reports, earnings releases, economic data, social media, market moves, newsletters, and portfolio updates. Most tools deliver more information but do not explain what matters, why it matters, or whether it affects the individual user.
+
+Atlas solves this by gathering market information, filtering noise, ranking importance, and generating personalized insights based on each user's portfolio, watchlist, goals, risk preferences, experience level, and learning history.
+
+Atlas is not another stock tracker, news feed, or chatbot. Its central product question is:
 
 > What do I need to know right now?
 
 Atlas should become the first application investors open every market day.
 
-### Problem Statement
+---
 
-Investor workflows are fragmented across market data platforms, news sites, portfolio trackers, analyst reports, economic calendars, newsletters, social media, and AI chatbots.
+# 2. Problem Statement
 
-This causes:
+The investing workflow is fragmented. A typical investor may use market data platforms, financial news sites, economic calendars, portfolio trackers, analyst reports, social media, AI chatbots, email newsletters, and brokerage tools just to understand what changed.
+
+This creates:
 
 - Information overload
 - Duplicate news
-- Lack of personalization
-- Time wasted gathering context
+- Weak personalization
+- Lost time gathering context
 - Difficulty understanding why events matter
-- Low confidence in what deserves attention
+- Confusion between facts, opinions, and AI-generated explanations
 
-Atlas bridges this gap by transforming scattered information into personalized intelligence.
+Most financial applications deliver information. Atlas exists to deliver understanding.
 
-### Mission
+---
 
-Help investors know what matters in under five minutes.
+# 3. Product Vision
 
-### Product Vision
+Atlas will become the AI operating system for investors. It augments human decision-making by organizing information, identifying important events, explaining context, reducing time-to-understanding, and helping users learn over time.
 
-Atlas will become the AI operating system for investors. It will not replace human decision-making. It will organize information, identify important events, explain why they matter, and reduce the time needed to stay informed.
+Atlas does not replace investor judgment. It supports judgment with personalized, explainable intelligence.
 
-### Atlas Doctrine
-
-Atlas does not try to answer every financial question. Atlas answers the right questions at the right time.
-
-Every feature must support the north star:
+North Star:
 
 > Know what matters.
 
-Features that increase complexity without increasing clarity should not be built.
+---
 
-## 2. Product Principles
+# 4. Product Principles
 
-### 2.1 Understanding Over Information
-
-Atlas helps users understand markets instead of simply consuming more information.
-
-Every feature should answer at least one of these questions:
-
-- What changed?
-- Why does it matter?
-- Does it affect me?
-
-### 2.2 Personalization First
-
-No two users should have the same Atlas experience. Atlas personalizes content using:
-
-- Portfolio
-- Watchlist
-- Investment goals
-- Risk preferences
-- Experience level
-- Reading history
-- Notification behavior
-- Learning progress
-
-### 2.3 AI Is an Analyst, Not a Fortune Teller
-
-Atlas explains facts, summarizes information, and provides context. It must not guarantee future performance, make unsupported claims, or present speculation as certainty.
-
-When uncertainty exists, Atlas communicates it clearly.
-
-### 2.4 Time Is the Most Valuable Asset
-
-Every feature should reduce the time required to understand the market. Atlas should save attention, not consume it.
-
-### 2.5 Clarity Over Complexity
-
-Financial information should be understandable to new investors. When Atlas uses technical language, it should explain the term in plain English.
-
-### 2.6 Trust Is Earned
-
-Every AI-generated insight should be traceable to reliable data or source material.
-
-Users should always be able to identify whether information is:
-
-- Live market data
-- News
-- AI-generated summary
-- Educational explanation
-- Opinion or interpretation
-
-### 2.7 Platform, Not Single Application
-
-Atlas is designed as a platform with clearly separated subsystems and contracts. Features should communicate through defined interfaces instead of directly coupling every part of the system.
-
-This improves maintainability, testability, scalability, and future expansion.
-
-## 3. Success Metrics
-
-Atlas succeeds when users:
-
-- Open the app most market mornings
-- Understand the market in less than five minutes
-- Feel more confident about what changed
-- Learn investing concepts over time
-- Return to Atlas as part of their routine
-
-Key product metrics:
-
-- Daily active users
-- Weekly retention
-- Morning Brief completion rate
-- Average session length
-- AI conversation count
-- User satisfaction
-- Premium conversion rate
-
-## 4. Target Users and Personas
-
-Atlas serves investors who value understanding over raw information. It is not only for professional traders. It should adapt to users across experience levels.
-
-Primary user groups:
-
-- Beginner investors
-- Long-term investors
-- Swing traders
-- Active traders
-- Financial learners
-
-### Alex: Beginner Investor
-
-- Age: 23
-- Portfolio: $2,300
-- Goal: Learn investing while growing long-term wealth
-- Problems: Does not know which news matters, does not understand financial terms, gets overwhelmed
-- Atlas goal: Teach Alex without making them feel lost or talked down to
-
-### Sarah: Intermediate Investor
-
-- Age: 36
-- Portfolio: $84,000
-- Goal: Stay informed in under ten minutes
-- Problems: Too many news sources, limited time, misses important events
-- Atlas goal: Replace several tools with one personalized briefing
-
-### David: Advanced Investor
-
-- Age: 48
-- Portfolio: $650,000
-- Goal: Receive concise intelligent summaries
-- Problems: Information overload, duplicate articles, wants fast analysis
-- Atlas goal: Act like an AI research analyst
-
-## 5. Investor Lifecycle
-
-Atlas should evolve as the user becomes more experienced.
-
-### Stage 1: Explorer
-
-The user is new to investing. Atlas should avoid overwhelming them with charts and jargon.
-
-Onboarding should collect only essential context:
-
-- Investing goal
-- Experience level
-- Preferred daily time commitment
-- Initial interests or holdings
-
-Atlas should adapt over time instead of forcing the user through excessive settings.
-
-### Stage 2: Builder
-
-The user owns a few stocks or funds. Atlas becomes more personalized:
-
-- Morning Brief references holdings and watchlist
-- Educational tips become more relevant
-- AI questions begin shaping the user's profile
-- Memory Graph begins learning preferences
-
-### Stage 3: Confident Investor
-
-The user asks more advanced questions. Atlas quietly increases the sophistication of explanations without requiring a manual setting.
-
-### Stage 4: Advanced Investor
-
-Atlas becomes less educational and more analytical. The experience emphasizes signal, risk, and concise context.
-
-### Stage 5: Expert
-
-Atlas becomes minimal. Expert users should receive concise risks, opportunities, and priority insights without unnecessary explanation.
-
-## 6. Atlas Intelligence Architecture
-
-Atlas uses a cognitive architecture. Raw information should not flow directly to the user. Market events, news, economic data, and portfolio information are processed through intelligence systems before becoming user-facing insights.
-
-### Core Systems
-
-| System | Abbreviation | Mission |
+| Principle | Meaning | Design Standard |
 | --- | --- | --- |
-| Atlas Intelligence Engine | AIE | Coordinate all intelligence workflows |
-| Atlas Decision Engine | ADE | Determine what deserves attention |
-| Atlas Context Engine | ACE | Explain why information matters |
-| Atlas Personalization Engine | APE | Determine relevance for each user |
-| Atlas Risk Engine | ARE | Evaluate portfolio and market risk conditions |
-| Atlas Learning Engine | ALE | Help users become better investors over time |
-| Atlas Memory Graph | AMG | Store long-term user preferences and learning signals |
-| Atlas Reasoning Engine | ARgE | Decide how to communicate final insights |
+| Understanding over information | Atlas helps users understand markets, not consume more content. | Every feature should answer what changed, why it matters, or whether it affects the user. |
+| Personalization first | No two users should have the same Atlas experience. | Prioritize portfolio, watchlist, goals, risk profile, experience, and behavior. |
+| AI is an analyst, not a fortune teller | Atlas explains facts, summarizes information, and provides context. | Do not guarantee performance or present speculation as certainty. |
+| Time is the most valuable asset | Atlas should reduce the time needed to understand markets. | Prefer concise, prioritized, high-signal experiences. |
+| Clarity over complexity | Financial information should be understandable to beginners. | Explain technical terms in plain English. |
+| Trust is earned | Users must know where information came from. | Distinguish live data, news, AI summary, opinion, and education. |
+| Atlas Doctrine | Atlas answers the right questions at the right time. | Do not build features that add complexity without increasing clarity. |
+| Platform over application | Atlas should be designed as durable financial intelligence infrastructure. | Build modular systems that can support future products and interfaces. |
 
-### Atlas Intelligence Engine (AIE)
+---
 
-The AIE is the central intelligence coordinator. User-facing intelligence must originate from the AIE or from systems orchestrated by it.
+# 5. Success Metrics
 
-Responsibilities:
+Atlas succeeds when users consistently return because it saves time and improves understanding.
 
-- Receive normalized market events
-- Coordinate decision, context, personalization, risk, learning, and reasoning systems
-- Produce user-facing insights
-- Maintain explainability
-- Prevent raw unranked information from bypassing the intelligence pipeline
+Primary metrics:
 
-### Atlas Decision Engine (ADE)
+- Daily active usage during market days
+- Morning Brief completion rate
+- Time required to understand top portfolio-relevant events
+- Insight engagement rate
+- User retention after first week and first month
+- AI assistant question resolution rate
+- Notification open rate for high-priority insights
+- User confidence and comprehension feedback
 
-Mission: Determine what deserves the user's attention.
+Product quality metrics:
 
-Responsibilities:
+- Percentage of insights with cited sources
+- Percentage of high-priority events correctly routed to dashboard, brief, or alert
+- Reduction in duplicate or low-value news shown to users
+- User-reported clarity of explanations
+- Low rate of AI uncertainty or hallucination defects
 
-- Score incoming events
-- Filter low-value information
-- Rank important events
-- Determine notification priority
-- Select Morning Brief content
-- Select dashboard content
+---
 
-Inputs:
+# 6. User Experience Philosophy
 
-- News
-- Market data
-- Economic events
-- Earnings events
-- Portfolio holdings
-- Watchlists
+Atlas should feel calm, intelligent, trustworthy, and fast. It should not feel like a noisy trading terminal or a hype-driven finance app.
 
-Outputs:
+UX standards:
 
-- Priority score
-- Visibility level
-- Alert eligibility
-- Morning Brief eligibility
+- Prioritize the most important information first.
+- Explain why each insight appears.
+- Keep the Morning Brief readable in under five minutes.
+- Make dashboards scannable.
+- Use plain language before technical detail.
+- Show confidence, sources, and uncertainty where appropriate.
+- Avoid unnecessary charts, alerts, and notifications.
+- Support both beginner and advanced investors without overwhelming either group.
 
-### Atlas Context Engine (ACE)
+---
 
-Mission: Explain why information matters.
+# 7. Target Users
 
-Responsibilities:
+Atlas serves investors who want better market understanding without manually assembling context across many tools.
 
-- Add historical context
-- Explain financial terminology
-- Compare similar historical events
-- Translate complex financial language into plain English
+Primary users:
 
-Example:
+- Retail investors with individual stock or ETF portfolios
+- Long-term investors who follow market-moving events
+- Beginner investors who need explanations
+- Intermediate investors who want faster daily context
+- Busy professionals who cannot monitor markets all day
 
-Raw news: Apple announced a stock buyback.
+Secondary users:
 
-Atlas context: Apple announced a $90B stock buyback. Buybacks generally reduce shares outstanding and are often viewed as a sign that management believes the company is undervalued.
+- Finance students
+- Research-oriented investors
+- Newsletter readers who want personalization
+- Users tracking watchlists before investing
 
-### Atlas Personalization Engine (APE)
+Atlas is not initially designed for high-frequency traders, options execution, automated investing, copy trading, crypto wallet management, or institutional portfolio management.
 
-Mission: Determine relevance for each individual investor.
+---
 
-APE considers:
+# 8. User Personas
 
-- Portfolio
-- Watchlist
-- Goals
-- Investment style
-- Experience level
-- Risk profile
-- Reading history
-- Notification settings
-- Learning progress
+| Persona | Needs | Atlas Value |
+| --- | --- | --- |
+| Beginner Investor | Plain-English explanations, learning support, confidence. | Explains concepts, avoids jargon, recommends learning moments. |
+| Busy Professional | Fast daily summary and relevant alerts. | Morning Brief, prioritized insights, low-noise notifications. |
+| Portfolio Tracker | Understands holdings, sector exposure, earnings, dividends, and major news. | Personalized dashboard and risk monitoring. |
+| Watchlist Researcher | Follows companies before buying. | Watchlist intelligence and company/event context. |
+| Learning-Oriented Investor | Wants to become more knowledgeable over time. | Learning Engine, concept tracking, adaptive explanations. |
 
-The same market event may have a different importance score for different users.
+---
 
-### Atlas Risk Engine (ARE)
+# 9. Atlas Decision Engine (ADE)
 
-Mission: Continuously evaluate portfolio risk and upcoming risk events.
+The Atlas Decision Engine is responsible for deciding what deserves the user's attention. No user-facing market intelligence should bypass the Decision Engine.
 
-Responsibilities:
+Every incoming Market Event receives an Importance Score. That score determines:
 
-- Detect portfolio concentration
-- Evaluate sector exposure
-- Monitor upcoming earnings
-- Monitor economic risk
-- Flag dividend changes
-- Identify unusual market conditions
-- Explain risk without making trade recommendations
+- Dashboard visibility
+- Ranking priority
+- Morning Brief inclusion
+- Notification eligibility
+- Alert urgency
+- AI assistant context inclusion
 
-Example output:
+Scoring inputs:
 
-> Your portfolio is 52% technology stocks. That is higher than your typical allocation, so upcoming technology earnings may have a larger impact on your account.
-
-### Atlas Learning Engine (ALE)
-
-Mission: Help users become better investors over time.
-
-Responsibilities:
-
-- Track concepts the user has asked about
-- Detect knowledge gaps
-- Recommend short lessons
-- Adjust explanation difficulty
-- Measure learning progress
-
-### Atlas Memory Graph (AMG)
-
-Mission: Maintain long-term understanding of each investor.
-
-Stored signals may include:
-
-- Preferred sectors
-- Investment goals
-- Learning progress
-- Favorite companies
-- Ignored topics
-- Preferred explanation style
-- Frequently asked questions
-- Notification behavior
-- Dashboard usage
-- Risk tolerance
-- Morning Brief completion history
-
-AMG should store durable preferences and learning signals, not unnecessary conversational noise.
-
-### Atlas Reasoning Engine (ARgE)
-
-Mission: Decide how to communicate outputs from the other engines.
-
-ARgE acts like an editor-in-chief. It combines event priority, context, personalization, risk, and learning signals into clear user-facing language.
-
-## 7. Domain Model
-
-Atlas should revolve around a focused set of core entities.
-
-### User
-
-Represents an individual investor.
-
-Owns:
-
-- Portfolio
-- Watchlists
-- Memory Graph
-- Learning Profile
-- Notifications
-- Insights
-- Preferences
-- Subscription
-
-### Portfolio
-
-Represents a user's investment accounts and holdings.
-
-Contains:
-
-- Holdings
-- Performance
-- Allocation
-- Risk metrics
-- Cash balance
-- Historical performance
-
-### Holding
-
-Represents ownership of a financial asset.
-
-Contains:
-
-- Ticker
-- Quantity
-- Average cost
-- Market value
-- Gain or loss
-- Sector
-- Asset type
-
-### Watchlist
-
-Represents securities the user wants to monitor without owning.
-
-Contains:
-
-- Securities
-- User-defined groups
-- Price and event monitoring settings
-
-### Security
-
-Represents a tradable or trackable financial instrument.
-
-Contains:
-
-- Ticker
-- Name
-- Exchange
-- Asset type
-- Sector
-- Industry
-- Company metadata
-
-### Market Event
-
-Represents something that happened in the market.
-
-Examples:
-
-- Earnings
-- Fed meeting
-- Analyst upgrade or downgrade
-- Dividend event
-- SEC filing
-- Economic report
-- Breaking news
-- Merger or acquisition
-- Product launch
-
-### Insight
-
-The primary user-facing output of Atlas.
-
-Contains:
-
-- Title
-- Summary
-- Explanation
-- Importance score
-- Confidence level
-- Sources
-- Related holdings
-- Related watchlist items
-- Generated time
-- Reason shown
-
-### Morning Brief
-
-A daily personalized summary of the user's market context.
-
-Contains:
-
-- Portfolio update
-- Top market events
-- Highest-priority insights
-- Risks
-- Opportunities
-- Upcoming events
-- Learning moment
-
-### Alert
-
-A notification delivered because an insight exceeded a priority threshold.
-
-Contains:
-
-- User
-- Insight
-- Priority
-- Channel
-- Delivery status
-- Timestamp
-
-### Learning Profile
-
-Represents the user's investing knowledge and learning journey.
-
-Contains:
-
-- Known concepts
-- Concepts in progress
-- Explanation level
-- Learning history
-- Suggested lessons
-
-### Source
-
-Represents external evidence used to produce an insight.
-
-Contains:
-
-- Provider
-- URL or reference ID
-- Published time
-- Retrieved time
-- Source type
-- Credibility metadata
-
-## 8. Core User Flows
-
-### 8.1 Onboarding
-
-1. User creates an account.
-2. Atlas asks for investing goal, experience level, and preferred daily time commitment.
-3. User adds holdings or watchlist items.
-4. Atlas creates an initial profile.
-5. Atlas generates the first dashboard and Morning Brief when enough data exists.
-
-### 8.2 Daily Morning Brief
-
-1. Market data, news, earnings, and economic events are ingested.
-2. AIE coordinates scoring and context generation.
-3. ADE ranks relevant events.
-4. APE personalizes relevance.
-5. ARE checks portfolio risk conditions.
-6. ARgE creates a concise user-facing brief.
-7. User reads the brief and can open related insights.
-
-### 8.3 Insight Generation
-
-1. A market event enters the system.
-2. The event is normalized.
-3. ADE scores importance.
-4. APE determines user relevance.
-5. ACE adds context and plain-English explanation.
-6. ARE adds risk context when appropriate.
-7. ARgE produces a final insight.
-8. The insight is stored and displayed.
-
-### 8.4 AI Assistant Question
-
-1. User asks a market, portfolio, or concept question.
-2. Atlas retrieves relevant portfolio, watchlist, insight, and source context.
-3. AIE coordinates a grounded response.
-4. The answer cites or references supporting data where practical.
-5. ALE updates learning signals when relevant.
-
-### 8.5 Alert Delivery
-
-1. An insight exceeds a configured priority threshold.
-2. Atlas checks user notification settings.
-3. Atlas verifies the event is timely and relevant.
-4. Atlas sends the alert through the selected channel.
-5. Delivery status is stored.
-
-## 9. Functional Requirements
-
-### FR-001: User Authentication
-
-Atlas shall allow users to:
-
-- Register
-- Log in
-- Log out
-- Reset password
-- Verify email
-- Manage account settings
-
-### FR-002: Portfolio Management
-
-Atlas shall allow users to:
-
-- Add holdings
-- Edit holdings
-- Delete holdings
-- View portfolio value
-- View gain or loss
-- View allocation
-- View related insights
-
-### FR-003: Watchlists
-
-Atlas shall allow users to:
-
-- Add securities to a watchlist
-- Remove securities from a watchlist
-- Search securities
-- View watchlist performance and relevant events
-
-### FR-004: Market Intelligence
-
-Atlas shall ingest and process:
-
-- Market prices
-- Company metadata
-- Financial news
-- Earnings events
-- Economic calendar events
-- Analyst events where available
-
-### FR-005: Morning Brief
-
-Atlas shall generate a personalized Morning Brief containing:
-
-- Portfolio update
-- Top market events
-- Highest-priority insights
-- Risks
-- Opportunities
-- Upcoming earnings
-- Upcoming economic events
-- Learning moment
-
-### FR-006: AI Assistant
-
-Atlas shall provide an AI assistant that can:
-
-- Explain news
-- Explain holdings
-- Explain market events
-- Explain investing concepts
-- Answer portfolio-aware questions
-- Reference available sources and user context
-
-The assistant shall not provide unsupported buy, sell, or hold instructions.
-
-### FR-007: Atlas Decision Engine
-
-Atlas shall score and rank events based on:
-
-- Market importance
 - Portfolio relevance
 - Watchlist relevance
-- Timeliness
+- Market impact
+- Recency
+- Event category
 - User preferences
-- Risk conditions
-- Source reliability
+- Risk profile
+- Educational value
+- Historical relevance
+- Confidence and source quality
 
-### FR-008: Insight Generation
+The ADE does not predict the future. It prioritizes attention.
 
-Atlas shall create insights that are:
+---
 
-- Personalized
-- Ranked
-- Explainable
-- Linked to source material when available
-- Related to holdings or watchlist items when relevant
-- Assigned confidence or uncertainty metadata
+# 10. Cognitive Architecture
 
-### FR-009: Notifications
+Atlas uses a cognitive architecture instead of a simple CRUD application architecture. Raw data enters Atlas, then specialized subsystems filter, contextualize, personalize, and communicate it.
 
-Atlas shall notify users only when relevant events exceed priority thresholds and the user's notification settings allow delivery.
+Core subsystems:
 
-### FR-010: Learning System
+| Subsystem | Mission | Responsibilities | Inputs | Outputs |
+| --- | --- | --- | --- | --- |
+| Atlas Intelligence Engine (AIE) | Orchestrate all intelligence workflows. | Normalize events, coordinate engines, generate final insights. | Market data, news, user context, AI responses. | Insights, briefs, alerts, assistant context. |
+| Atlas Decision Engine (ADE) | Determine what deserves attention. | Score, rank, filter, prioritize, select brief and alert candidates. | News, market data, events, portfolio, watchlist. | Importance score, visibility level, alert eligibility. |
+| Atlas Context Engine (ACE) | Explain why information matters. | Add history, define terms, compare similar events, translate complex language. | Events selected by ADE. | Explanations, historical comparisons, plain-language summaries. |
+| Atlas Personalization Engine (APE) | Decide relevance for each investor. | Interpret portfolio, goals, style, experience, notification settings, reading habits. | User profile, holdings, watchlists, behavior. | Personalized relevance and presentation guidance. |
+| Atlas Risk Engine (ARE) | Monitor portfolio and event risk. | Evaluate concentration, sector exposure, earnings, macro events, volatility, dividend changes, unusual conditions. | Portfolio, holdings, market events, economic calendar. | Risk levels, warnings, monitoring suggestions, explanations. |
+| Atlas Learning Engine (ALE) | Help users become better investors. | Track learned concepts, recommend education, detect gaps, adjust explanation depth. | Questions, reading behavior, learning records. | Learning moments, recommended lessons, explanation complexity. |
+| Atlas Memory Graph (AMG) | Store persistent investor understanding. | Persist preferences, goals, sectors, ignored topics, risk tolerance, explanation style, behavior. | User actions, settings, conversations, usage. | Long-term personalization context. |
+| Atlas Reasoning Engine (ARgE) | Decide how to communicate intelligence. | Combine ADE, ACE, APE, ARE, ALE, and AMG outputs into clear user-facing language. | Engine outputs. | Final message, tone, depth, and structure. |
 
-Atlas shall adapt explanations and recommend learning content based on user knowledge signals.
+Example: if Apple announces a buyback, Atlas should not merely repeat the headline. It should explain the size, why buybacks matter, historical context, relevance to the user's holdings or watchlist, confidence, and whether action is needed.
 
-### FR-011: Search
+---
 
-Atlas shall allow users to search companies and tickers, then open company pages.
+# 11. Investor Lifecycle
 
-### FR-012: Company Page
+Atlas should support the investor from onboarding through daily use and long-term learning.
 
-Atlas shall provide company pages with:
+| Stage | User Goal | Atlas Responsibility |
+| --- | --- | --- |
+| Onboarding | Create account and define investing context. | Capture profile, preferences, risk tolerance, experience, portfolio, watchlist. |
+| Portfolio setup | Add holdings and cost basis. | Store holdings, calculate allocation, gains/losses, exposure, and relevance. |
+| Daily awareness | Understand what changed today. | Generate Morning Brief and dashboard insights. |
+| Event response | Understand urgent or important events. | Prioritize alerts and explain relevance. |
+| Research | Learn about companies, sectors, and concepts. | Provide AI assistant, company pages, source-backed explanations. |
+| Learning | Become a better investor over time. | Track concepts, adjust explanations, suggest learning moments. |
+| Retention | Make Atlas a daily habit. | Keep the experience useful, concise, trustworthy, and personalized. |
 
-- Current price
-- Company overview
-- Recent news
-- Related insights
-- AI-generated summary
+---
 
-## 10. Non-Functional Requirements
+# 12. Domain Model
 
-### NFR-001: Performance
+Atlas should revolve around a small set of durable entities rather than many disconnected objects.
+
+| Entity | Represents | Owns or Contains |
+| --- | --- | --- |
+| User | An individual investor using Atlas. | Authentication, preferences, subscription, settings, profile. |
+| Portfolio | A user's investment accounts or manually tracked holdings. | Holdings, performance, allocation, risk metrics, cash balance, history. |
+| Holding | Ownership of a single asset such as AAPL, NVDA, SPY. | Ticker, quantity, average cost, market value, gain/loss, sector, asset type. |
+| Watchlist | Securities the user follows without necessarily owning. | Symbols, ordering, performance, related insights. |
+| Market Event | Something that happened in markets. | Earnings, Fed meeting, analyst action, dividend, SEC filing, economic report, breaking news, merger, product launch. |
+| Insight | A personalized explanation generated from one or more Market Events. | Title, summary, explanation, importance, confidence, sources, related holdings, category, timestamp. |
+| Alert | A notification sent because an Insight crossed a priority threshold. | Event, priority, message, channel, delivery status. |
+| Morning Brief | Daily package of the highest-priority intelligence. | Portfolio summary, market summary, top events, risks, opportunities, learning moment. |
+| Learning Record | User knowledge and concept progression. | Concepts, confidence score, last reviewed, next lesson. |
+| Memory Node | Persistent personalization data. | Favorite sectors, ignored topics, risk preferences, reading habits, learning style, notification behavior. |
+| Source | Evidence behind a Market Event or Insight. | URL, provider, timestamp, credibility metadata. |
+| Notification Preference | User control over alerts. | Categories, channels, quiet hours, thresholds. |
 
-- Core dashboard pages should load quickly under normal conditions.
-- Morning Brief generation should complete within the scheduled delivery window.
-- AI responses should stream or otherwise provide timely feedback.
+Primary flow:
 
-### NFR-002: Reliability
+Market Event -> AIE -> Insight -> Morning Brief/Dashboard/Alert -> User feedback -> Memory Graph/Learning Record
 
-- Atlas should handle provider failures gracefully.
-- Failed background jobs should be retryable.
-- Users should not see broken pages when external data is temporarily unavailable.
+---
+
+# 13. Core User Flows
 
-### NFR-003: Security
+Every feature should support a documented user outcome.
 
-- Authentication is required for private user data.
-- Sensitive data must not be exposed across users.
-- Secrets must be stored in managed environment configuration.
-- Server-side authorization checks are required for protected operations.
+## Flow 1: Onboard a User
 
-### NFR-004: Privacy
+1. User creates an account.
+2. User verifies email.
+3. User selects experience level, goals, risk tolerance, and notification preferences.
+4. User adds portfolio holdings or starts with a watchlist.
+5. Atlas creates an initial Memory Graph and Learning Profile.
 
-- Atlas should minimize unnecessary data collection.
-- Users should be able to delete personal data.
-- Users should be able to export personal data when practical.
-- AI providers must not become the source of truth for user state.
+## Flow 2: Manage Portfolio
 
-### NFR-005: Explainability
+1. User adds, edits, or removes holdings.
+2. Atlas stores quantity, average cost, sector, asset type, and market value.
+3. Atlas calculates allocation, gain/loss, performance, and risk signals.
+4. Portfolio context becomes available to ADE, APE, ARE, ALE, and ARgE.
+
+## Flow 3: Manage Watchlist
 
-Atlas should explain:
+1. User searches for securities.
+2. User adds or removes securities from watchlist.
+3. Atlas tracks watchlist events and performance.
+4. Watchlist relevance influences insights, brief content, and assistant answers.
 
-- Why an insight exists
-- Why it matters
-- Why it was shown to the user
-- What evidence supports it
-- What uncertainty remains
+## Flow 4: Generate Insights
 
-### NFR-006: Scalability
-
-The MVP may use a simple architecture, but subsystem boundaries should allow future scaling.
-
-### NFR-007: Maintainability
-
-- Business logic should not live in UI components.
-- Provider integrations should use adapter interfaces.
-- Core logic should be testable without external services.
-- Documentation should be updated when architectural behavior changes.
-
-### NFR-008: Accessibility
-
-Atlas should follow accessible design practices:
-
-- Semantic HTML
-- Keyboard navigation
-- Sufficient contrast
-- Clear focus states
-- Screen-reader-friendly labels
-
-### NFR-009: Observability
-
-Atlas should log important system events, failed jobs, ingestion failures, and AI pipeline errors without exposing sensitive user data.
-
-### NFR-010: AI Behavior
-
-AI outputs should be:
-
-- Grounded in available context
-- Clearly uncertain when evidence is limited
-- Plain-English by default
-- Appropriate to user experience level
-- Free of unsupported financial guarantees
-
-## 11. System Context
-
-### External Actors
-
-| Actor | Role |
-| --- | --- |
-| Investor | Uses Atlas to understand markets, portfolio, and watchlist |
-| Market Data Provider | Supplies prices, company metadata, and market status |
-| Financial News Provider | Supplies financial news and market events |
-| AI Provider | Generates language, summaries, and reasoning support |
-| Authentication Provider | Manages identity and sessions |
-| Notification Provider | Sends push, in-app, or other notifications |
-| Email Provider | Sends account and product emails |
-| Analytics Provider | Tracks product usage and reliability metrics |
-
-### System Context Diagram
-
-```text
-Investor
-   |
-   v
-Atlas Application
-   |
-   +--> Authentication Provider
-   +--> Market Data Provider
-   +--> Financial News Provider
-   +--> AI Provider
-   +--> Notification Provider
-   +--> Email Provider
-   +--> Analytics Provider
-```
-
-## 12. High-Level Architecture
-
-Atlas uses a layered architecture.
-
-```text
-Presentation Layer
-       |
-Application Layer
-       |
-Intelligence Layer
-       |
-Data Layer
-       |
-Integration Layer
-       |
-Infrastructure Layer
-```
-
-### 12.1 Presentation Layer
-
-Responsibilities:
-
-- Render UI
-- Manage interaction state
-- Display dashboard, portfolio, watchlists, insights, and assistant
-- Call application APIs
-
-Constraints:
-
-- Must not directly query external providers
-- Must not contain business logic
-- Must not bypass the Intelligence Layer for user-facing intelligence
-
-### 12.2 Application Layer
-
-Responsibilities:
-
-- Expose route handlers and APIs
-- Enforce authorization
-- Coordinate use cases
-- Validate input
-- Call domain services and intelligence workflows
-
-### 12.3 Intelligence Layer
-
-Responsibilities:
-
-- Rank market events
-- Generate insights
-- Personalize content
-- Add context
-- Evaluate risk
-- Coordinate AI outputs
-
-All user-facing intelligence must originate here.
-
-### 12.4 Data Layer
-
-Responsibilities:
-
-- Store users, portfolios, holdings, watchlists, insights, alerts, sources, and learning profiles
-- Provide persistence APIs
-- Protect data integrity
-
-### 12.5 Integration Layer
-
-Responsibilities:
-
-- Connect to external providers
-- Normalize provider responses
-- Handle retries and provider errors
-- Keep provider details out of business logic
-
-### 12.6 Infrastructure Layer
-
-Responsibilities:
-
-- Hosting
-- Database hosting
-- Background jobs
-- Environment configuration
-- CI/CD
-- Monitoring
-
-### Architectural Constraints
-
-- Presentation components shall never directly query external providers.
-- Business logic shall never execute inside UI components.
-- The Intelligence Layer shall remain independent of UI technologies.
-- External providers shall be replaceable.
-- Subsystems shall communicate through defined interfaces.
-- Persistent data shall be stored through the Data Layer.
-- AI providers shall never become the source of truth for application state.
-- All user-facing intelligence shall originate from the Atlas Intelligence Engine.
-
-## 13. Architectural Decision Records
-
-ADRs document significant decisions. Existing ADRs should not be rewritten when decisions change. Instead, create a new ADR that supersedes the old one.
-
-Each ADR should include:
-
-- Unique identifier
-- Title
-- Status
-- Context
-- Decision
-- Rationale
-- Consequences
-
-### ADR-001: Atlas Shall Use a Layered Architecture
+1. Atlas ingests Market Events from external providers.
+2. AIE normalizes events.
+3. ADE scores event importance.
+4. APE evaluates user relevance.
+5. ACE adds context and explanations.
+6. ARE adds risk interpretation where needed.
+7. ARgE creates the final user-facing Insight.
+8. Atlas stores and displays the Insight.
+
+## Flow 5: Morning Brief
+
+1. Atlas gathers the highest-priority overnight and premarket events.
+2. ADE selects brief candidates.
+3. APE personalizes ordering and emphasis.
+4. ACE and ALE add explanation and learning content.
+5. ARgE composes a brief that can be consumed in under five minutes.
+6. User reads, saves, opens, or dismisses items.
+
+## Flow 6: AI Assistant
+
+1. User asks a question.
+2. Application Layer validates request and retrieves safe user context.
+3. AIE selects relevant portfolio, watchlist, insight, and learning context.
+4. AI provider generates language under Atlas orchestration.
+5. Response distinguishes fact, inference, opinion, and uncertainty.
+6. Learning and Memory systems update if appropriate.
+
+---
+
+# 14. Functional Requirements
+
+Priority levels:
+
+- MUST: required for MVP.
+- SHOULD: important but not required for first release.
+- COULD: potential future enhancement.
+- VISION: long-term direction.
+
+| ID | Priority | Requirement |
+| --- | --- | --- |
+| FR-001 | MUST | User authentication: register, login, logout, password reset, email verification. Future support for OAuth providers such as Google, Apple, and Microsoft. |
+| FR-002 | MUST | Portfolio management: add, edit, remove holdings; track quantity and average purchase price; view performance, allocation, and unrealized gain/loss. Future broker synchronization. |
+| FR-003 | MUST | Watchlists: create watchlists, add/remove/reorder securities, search securities, view watchlist performance. Future multiple and shared watchlists. |
+| FR-004 | MUST | Market intelligence: collect events, process through AIE, generate personalized insights, rank and store insights, display them on the dashboard. Raw event streams shall not be shown by default. |
+| FR-005 | MUST | Morning Brief: generate one personalized brief per trading day with portfolio summary, top events, highest-priority insights, upcoming economic events, upcoming earnings, risks, opportunities, and a learning moment. Target read time is under five minutes. |
+| FR-006 | MUST | AI Assistant: answer questions, explain concepts, explain market events and portfolio changes, reference holdings, provide educational responses, distinguish facts from opinions, and communicate uncertainty. |
+| FR-007 | MUST | Decision Engine: score every Market Event using portfolio relevance, watchlist relevance, market impact, recency, category, preferences, and educational value; determine visibility, brief inclusion, notification eligibility, and priority. |
+| FR-008 | MUST | Insight generation: create personalized Insights containing title, summary, explanation, importance score, confidence score, sources, related holdings, timestamp, and category. |
+| FR-009 | SHOULD | Notifications: notify users about high-priority insights, major holding events, approaching economic events, and elevated risk. Notifications must be configurable and disableable by category. |
+| FR-010 | SHOULD | Learning system: track learned concepts, frequently asked questions, knowledge progression, and preferred explanation complexity. |
+
+## Out of Scope for MVP
+
+Version 1.0 excludes broker trading, automated investing, buy/sell recommendations, social networking, copy trading, options execution, crypto wallets, tax reporting, algorithmic trading, automatic rebalancing, voice assistant, native desktop app, and native mobile app.
+
+---
+
+# 15. Non-Functional Requirements
+
+| ID | Priority | Requirement |
+| --- | --- | --- |
+| NFR-001 | MUST | Performance: dashboard initial load should target under 2 seconds in normal conditions; Morning Brief should render within 3 seconds after required data is collected; long operations need progress states; avoid unnecessary network requests; run expensive work on backend services where practical. |
+| NFR-002 | MUST | Reliability: non-critical service failures must not crash unrelated functionality; retry temporary external API failures when appropriate; communicate missing data clearly; never show raw exceptions to users. |
+| NFR-003 | MUST | Security: never store plaintext passwords; never place secrets in frontend source; use secure environment variables, HTTPS, secure sessions, least privilege, and authorization checks for portfolio data. |
+| NFR-004 | MUST | Privacy: users own their data; collect only necessary information; secure AI conversations that contain portfolio data; allow account and portfolio deletion; distinguish user data from AI-generated content. |
+| NFR-005 | MUST | Explainability: explain why important insights appear, cite supporting evidence when practical, separate facts from inference/opinion/education, and communicate uncertainty. |
+| NFR-006 | SHOULD | Scalability: support user growth without architectural redesign; keep subsystems modular; make providers replaceable; keep business logic independent of UI; support horizontal scaling where practical. |
+| NFR-007 | MUST | Maintainability: keep code modular; separate business and presentation logic; prefer single-responsibility functions and reusable components; keep documentation synchronized; track technical debt. |
+| NFR-008 | SHOULD | Accessibility: support keyboard navigation, accessible labels, readable typography, dark and light mode, and avoid using color as the only indicator. |
+| NFR-009 | SHOULD | Observability: log important backend events; capture diagnostic errors; measure performance; detect critical failures; distinguish app errors from provider failures. |
+| NFR-010 | MUST | AI behavior: never fabricate market data; distinguish facts from generated explanations; acknowledge uncertainty; avoid speculation as certainty; never imply access to unavailable information; provide educational explanations when useful. |
+| NFR-011 | MUST | Engineering standards: every feature must trace to documented requirements; PRs should reference relevant requirement IDs; breaking architectural changes require SDS or ADR updates. |
+
+---
+
+# 16. System Context
+
+Atlas is the boundary between investors and external financial, AI, authentication, notification, email, and analytics providers. External integrations must remain replaceable and loosely coupled.
+
+| External Actor | Responsibilities | Atlas Rule |
+| --- | --- | --- |
+| Investor | Create account, manage portfolio/watchlist, read insights, ask AI questions, manage preferences. | Atlas protects data, personalizes intelligence, explains clearly, and adapts over time. |
+| Market Data Provider | Provide prices, history, company metadata, market status, calendars, volume, index information. | Provider-specific logic must stay behind adapters. |
+| Financial News Provider | Provide breaking news, company news, economic news, press releases, metadata. | News enters Atlas as raw events and must pass through AIE before user display. |
+| AI Provider | Generate language, summarize, answer questions, explain concepts, create educational content. | Atlas owns orchestration and business logic; AI providers are replaceable. |
+| Authentication Provider | Support registration, identity verification, authentication, sessions. | Authentication remains isolated from business logic. |
+| Notification Provider | Deliver push, email, and system alerts. | Delivery providers never decide priority; ADE does. |
+| Email Provider | Send verification, password reset, weekly summaries, account notices. | Templates are version controlled; business logic does not live in templates. |
+| Analytics Provider | Collect anonymous usage metrics, health, and adoption signals. | Analytics must not expose personally identifiable investment information and must respect privacy preferences. |
+
+System flow:
+
+Investor -> Presentation Layer -> Application Layer -> Intelligence Layer -> Data/Integration Layers -> Providers
+
+All user-facing intelligence flows through Atlas. The frontend does not talk directly to news providers, the notification system does not decide importance, and AI providers do not own core market logic.
+
+---
+
+# 17. High-Level System Architecture
+
+Atlas uses a layered architecture to preserve maintainability, scalability, modularity, and testability.
+
+| Layer | Purpose | Responsibilities |
+| --- | --- | --- |
+| Presentation Layer | User interface. | Display dashboards, Morning Briefs, insights, portfolio data, AI conversations, notifications; collect input; contain no business logic. |
+| Application Layer | Workflow coordination. | Receive requests, validate input, manage sessions, coordinate services, invoke intelligence workflows, return responses. |
+| Intelligence Layer | Core product logic. | AIE, ADE, ACE, APE, ARE, ALE, AMG, ARgE; rank events, generate insights, evaluate relevance/risk, create briefs, support AI conversations. |
+| Data Layer | Persistence. | Store users, portfolios, holdings, insights, briefs, learning records, memory graph, notifications, preferences; enforce integrity. |
+| Integration Layer | External communication. | Retrieve market data/news, communicate with AI/auth/email/notification/analytics providers, normalize data, shield internal logic from vendor details. |
+| Infrastructure Layer | Runtime operations. | Hosting, deployment, monitoring, logging, scaling, secrets, backups, disaster recovery. |
+
+Architectural constraints:
+
+- Business logic belongs in Atlas, especially the Intelligence Layer.
+- Presentation logic must not contain financial reasoning.
+- External providers must be accessed through adapters.
+- Insights are the primary product output.
+- Morning Briefs, dashboards, alerts, and AI conversations should consume Insights rather than raw events.
+- Provider replacement should not require rewriting core product logic.
+
+---
+
+# 18. Architectural Decision Records
+
+ADRs record significant technical decisions, including context, decision, rationale, and consequences. Existing ADRs should remain historically stable; if a decision changes, create a new ADR that supersedes the old one.
+
+## ADR-001: Atlas shall use a layered architecture
 
 Status: Accepted
 
-Context: Atlas will include multiple intelligence systems, external integrations, and user-facing applications. Without architectural boundaries, business logic can become tightly coupled to presentation and infrastructure concerns.
+Context: Atlas will include intelligence systems, integrations, and user-facing applications. Without boundaries, business logic could couple to UI or infrastructure.
 
 Decision: Atlas separates responsibilities into Presentation, Application, Intelligence, Data, Integration, and Infrastructure layers.
 
-Rationale: Layered architecture improves maintainability, scalability, testing, and long-term flexibility.
+Rationale: Improves maintainability, scalability, testing, and future flexibility.
 
-Consequences: Clearer separation of responsibilities and better testability, with some additional architectural complexity.
+Consequences: Clearer responsibilities and better testability, with some added architectural complexity.
 
-### ADR-002: User-Facing Intelligence Shall Originate From AIE
-
-Status: Accepted
-
-Context: Atlas exists to reduce information overload through filtering, ranking, explanation, and personalization.
-
-Decision: Every market event must pass through the Atlas Intelligence Engine before becoming user-facing intelligence.
-
-Rationale: This creates a consistent, explainable, personalized experience.
-
-Consequences: Additional processing complexity, but stronger product differentiation.
-
-### ADR-003: External Providers Shall Remain Replaceable
+## ADR-002: All user-facing intelligence shall originate from the Atlas Intelligence Engine
 
 Status: Accepted
 
-Context: Atlas depends on external services for AI, market data, authentication, notifications, and email.
+Context: Atlas reduces information overload by filtering and explaining raw information.
 
-Decision: External providers communicate through adapter interfaces. Core business logic must not depend directly on provider implementations.
+Decision: Every Market Event must pass through AIE before reaching users. No user-facing intelligence bypasses AIE.
 
-Rationale: This reduces vendor lock-in and simplifies migrations.
+Rationale: Enables consistency, personalization, explainability, and noise reduction.
 
-Consequences: Additional abstraction, lower long-term migration cost.
+Consequences: Requires additional processing and implementation complexity, but creates stronger differentiation.
 
-### ADR-004: Insights Are the Primary Product Output
-
-Status: Accepted
-
-Context: Financial applications often present raw data, charts, or news articles. Atlas transforms information into understanding.
-
-Decision: Personalized Insights are the primary product output. Morning Briefs, dashboards, alerts, and AI conversations consume insights instead of raw events wherever practical.
-
-Rationale: This separates facts from interpretation and creates architectural consistency.
-
-Consequences: Requires an insight generation pipeline, but simplifies downstream experiences.
-
-### ADR-005: AI Is a Capability, Not the Product Itself
+## ADR-003: External providers shall remain replaceable
 
 Status: Accepted
 
-Context: LLMs and providers change quickly. Atlas should remain valuable regardless of future models.
+Context: Atlas depends on AI, market data, authentication, notification, email, and analytics providers that may change.
 
-Decision: Business logic remains inside Atlas. AI providers generate language and reasoning support only when requested by Atlas.
+Decision: Providers communicate through adapter interfaces. Core logic must not depend directly on provider implementations.
 
-Rationale: Protects long-term independence and explainability.
+Rationale: Reduces vendor lock-in and migration cost.
 
-Consequences: More engineering effort, stronger architectural stability.
+Consequences: Adds abstraction but improves maintainability.
 
-### ADR-006: Atlas Prioritizes Explainability
+## ADR-004: Insights are the primary product output
 
 Status: Accepted
 
-Context: Users are more likely to trust insights they can understand.
+Context: Atlas exists to transform information into understanding.
 
-Decision: Atlas should explain why an insight exists, why it matters, why it was shown, and what evidence supports it.
+Decision: Personalized Insights are the primary output. Briefs, dashboards, alerts, and AI conversations consume Insights instead of raw events.
 
-Rationale: Builds trust and supports learning.
+Rationale: Separates facts from interpretation, improves consistency, and supports AI enhancements.
 
-Consequences: Additional implementation effort, greater user confidence.
+Consequences: Requires an Insight pipeline while simplifying downstream experiences.
 
-### ADR-007: Users Own and Control Their Data
+## ADR-005: AI is an implementation capability, not the product itself
+
+Status: Accepted
+
+Context: LLM providers and models evolve rapidly.
+
+Decision: Atlas owns business logic. AI providers generate language and reasoning only under Atlas orchestration.
+
+Rationale: Protects independence, explainability, and stability.
+
+Consequences: More engineering effort, less vendor dependency.
+
+## ADR-006: Atlas prioritizes explainability over opaque outputs
+
+Status: Accepted
+
+Context: Investors trust outputs they can understand.
+
+Decision: Atlas explains why an Insight exists, why it matters, why it was shown, and what evidence supports it whenever practical.
+
+Rationale: Builds trust, supports learning, and improves decision quality.
+
+Consequences: Requires more implementation effort but creates greater confidence.
+
+## ADR-007: Users retain ownership and control of their data
 
 Status: Accepted
 
 Context: Atlas processes sensitive financial information.
 
-Decision: Users should be able to export and delete personal data. Atlas should minimize unnecessary collection.
+Decision: Users can export and delete personal data. Atlas minimizes unnecessary data collection.
 
-Rationale: Supports trust, privacy, and modern data protection expectations.
+Rationale: Builds trust and aligns with modern privacy expectations.
 
-Consequences: Additional engineering effort for export and deletion workflows.
+Consequences: Requires export/deletion workflows and stronger data governance.
 
-### ADR-008: Documentation Is a Core Product Asset
+## ADR-008: Documentation is a core product asset
 
 Status: Accepted
 
-Context: Atlas will evolve with multiple contributors and AI coding assistants.
+Context: Atlas will evolve over years with multiple contributors and AI coding agents.
 
-Decision: The SDS remains the authoritative reference for architecture and system behavior.
+Decision: The SDS remains the authoritative reference for architecture and behavior. Architectural changes must be documented before or alongside implementation.
 
 Rationale: Reduces onboarding time, preserves intent, and limits architectural drift.
 
-Consequences: Requires documentation discipline, but improves long-term velocity.
+Consequences: Adds documentation effort but improves long-term velocity and consistency.
 
-## 14. MVP Scope
+---
+
+# 19. Minimum Viable Product Scope
 
 The MVP validates this hypothesis:
 
 > Investors will consistently use Atlas if it transforms financial information into personalized intelligence.
 
-### MVP Goals
-
 Version 1.0 must allow a user to:
 
-- Create an account
-- Build a portfolio
-- Build a watchlist
-- Receive personalized insights
-- Receive a Morning Brief
-- Ask AI questions about the market and portfolio
-- Understand why important events matter
-- Return to Atlas daily
+- Create an account.
+- Build a portfolio.
+- Build a watchlist.
+- Receive personalized Insights.
+- Receive a Morning Brief.
+- Ask AI questions about markets and their portfolio.
+- Understand why important events matter.
+- Return to Atlas daily.
 
-### Included Features
+## Included MVP Features
 
-Authentication:
+| Feature | Priority | Required Capabilities |
+| --- | --- | --- |
+| Authentication | MUST | Registration, login, logout, password reset, email verification. |
+| Portfolio | MUST | Add/edit/delete holdings, performance, gain/loss, allocation overview. |
+| Watchlist | MUST | Add/remove/search securities and view watchlist. |
+| Dashboard | MUST | Portfolio summary, today's Morning Brief, top insights, upcoming earnings, upcoming economic events, recent alerts. |
+| Morning Brief | MUST | Daily summary, portfolio update, top events, highest-priority insights, risks, opportunities, learning moment. |
+| Insights | MUST | Personalized, ranked, explainable, source-linked, related holdings, confidence score. |
+| AI Assistant | MUST | Context-aware questions, portfolio references, market explanations, educational responses. |
+| Decision Engine | MUST | Event scoring, ranking, visibility, brief inclusion, alert eligibility. |
+| Search | MUST | Search companies and securities. |
+| Company Page | MUST | Show company overview, related holdings/watchlist state, recent events, relevant insights. |
 
-- Account registration
-- Login
-- Logout
-- Password reset
-- Email verification
+## Excluded from Version 1.0
 
-Portfolio:
+Excluded items remain potential future work but must not be implemented in MVP unless the SDS or an ADR changes: broker trading, automated investing, buy/sell recommendations, social networking, copy trading, options execution, crypto wallets, tax reporting, algorithmic trading, automatic rebalancing, voice assistant, native desktop app, native mobile app, advanced broker sync, complex subscription tiers, and institutional tooling.
 
-- Add holdings
-- Edit holdings
-- Delete holdings
-- Portfolio performance
-- Gain or loss
-- Allocation overview
+## MVP Success Criteria
 
-Watchlist:
+The MVP is successful if:
 
-- Add securities
-- Remove securities
-- Search securities
-- View watchlist
+- Users can complete onboarding without developer assistance.
+- Portfolio and watchlist data influence insights.
+- Morning Briefs are generated reliably on trading days.
+- Insights are personalized, explainable, and source-backed.
+- The AI assistant uses Atlas context safely.
+- The app remains fast, understandable, and stable.
+- Users can return daily and immediately see what matters.
 
-Dashboard:
+## Deferred Engineering
 
-- Portfolio summary
-- Today's Morning Brief
-- Top insights
-- Upcoming earnings
-- Upcoming economic events
-- Recent alerts
+Deferred work includes broker integrations, mobile clients, advanced analytics, automated portfolio actions, social/community features, enterprise compliance tooling, and large-scale provider redundancy.
 
-Morning Brief:
+---
 
-- Daily summary
-- Portfolio update
-- Top market events
-- Highest-priority insights
-- Risks
-- Opportunities
-- Learning moment
+# 20. Technology Stack
 
-Insights:
+Technology choices prioritize developer productivity, maintainability, ecosystem maturity, and AI-assisted development compatibility. Future changes require an ADR.
 
-- Personalized
-- Ranked
-- Explainable
-- Linked to sources
-- Related to holdings
-- Confidence score
+| Area | Selection |
+| --- | --- |
+| Frontend/Application | Next.js |
+| Backend | Next.js Route Handlers for initial implementation |
+| Language | TypeScript |
+| ORM | Prisma |
+| Validation | Zod |
+| Authentication | Clerk or Supabase Auth |
+| Background Jobs | Trigger.dev or equivalent |
+| API Style | REST for MVP |
+| Database | PostgreSQL hosted by Supabase |
+| AI Provider | OpenAI |
+| Prompt Management | Version controlled |
+| Structured Outputs | JSON where practical |
+| Market Data Provider | To be selected during implementation |
+| Market Data Requirements | US equities, company metadata, historical prices, market status, economic calendar, news access or paired provider |
+| Hosting | Vercel |
+| Repository | GitHub |
+| CI/CD | GitHub Actions |
 
-AI Assistant:
+Development principles:
 
-- Explain news
-- Explain holdings
-- Explain concepts
-- Explain market events
-- Answer questions
-- Reference portfolio context
+- Type safety first.
+- Small pull requests.
+- Test critical logic.
+- Document architectural changes.
+- Never bypass the Atlas Intelligence Engine.
+- Maintain a clean Git history.
+- Prefer readability over cleverness.
 
-Decision Engine:
+---
 
-- Event ranking
-- Priority scoring
-- Portfolio relevance
-- Watchlist relevance
-- Dashboard selection
-- Morning Brief selection
+# 21. Development Roadmap
 
-Search and Company Pages:
+Atlas shall be built incrementally. Each milestone must produce a working, testable application and must not depend on unfinished future functionality.
 
-- Search companies and tickers
-- Open company pages
-- View price, company overview, recent news, related insights, and AI summary
+| Milestone | Scope |
+| --- | --- |
+| 1 | Project initialization, GitHub repo, Next.js, TypeScript, Tailwind, shadcn/ui, Prisma, Supabase connection, authentication, basic layout, deployment pipeline. |
+| 2 | Portfolio CRUD, watchlist CRUD, database models, dashboard widgets, portfolio calculations, company search. |
+| 3 | Market event ingestion, news ingestion, basic Decision Engine, insight generation, insight storage, dashboard integration. |
+| 4 | Morning Brief generation, dashboard integration, daily summaries, economic calendar, earnings integration. |
+| 5 | AI assistant, context-aware prompts, portfolio awareness, insight explanations, educational responses. |
+| 6 | Bug fixing, performance improvements, UI polish, accessibility review, testing, private alpha release, feedback collection. |
 
-### Excluded From MVP
+---
 
-The following are intentionally out of scope for Version 1.0:
+# 22. Implementation Guide
 
-- Broker integration
-- Automatic trade import
-- Trading
-- Buy or sell recommendations
-- Social features
-- Copy trading
-- Community discussions
-- Paper trading
-- Crypto wallets
-- Desktop application
-- Native mobile applications
-- Advanced Learning Engine
-- Atlas Memory Graph beyond basic profile signals
-- Advanced Risk Engine
-- Voice conversations
-- Autonomous AI agents
-- Plugin system
-- Custom automations
-- Options analytics
-- Tax reporting
+The SDS is authoritative for Atlas Version 1.0. Implementation follows this document unless an accepted ADR supersedes it.
 
-### MVP Success Criteria
-
-The MVP is successful if users:
-
-- Understand the product within five minutes
-- Return multiple times per week
-- Read the Morning Brief
-- Ask AI questions
-- Receive value from personalized insights
-- Report that Atlas reduces information overload
-
-### Deferred Engineering
-
-The MVP prioritizes validation over optimization. These can wait until after validation:
-
-- Microservice decomposition
-- Advanced caching
-- Horizontal scaling
-- Complex event processing
-- Provider redundancy
-- High-availability deployment
-- Enterprise monitoring
-- Performance optimization beyond MVP targets
-
-## 15. Technology Stack
-
-Technology choices prioritize developer productivity, maintainability, ecosystem maturity, and AI-assisted development compatibility.
-
-### Application
-
-- Frontend: Next.js, React, TypeScript
-- Styling: Tailwind CSS
-- UI components: shadcn/ui or equivalent
-- API style: REST for MVP
-
-### Backend
-
-- Initial backend: Next.js Route Handlers
-- Language: TypeScript
-- ORM: Prisma
-- Validation: Zod
-- Background jobs: Trigger.dev or equivalent
-
-### Data
-
-- Database: PostgreSQL
-- Hosted database: Supabase
-
-### Authentication
-
-- Clerk or Supabase Auth
-
-### AI
-
-- Primary provider: OpenAI
-- Prompt management: version controlled
-- Structured outputs: JSON where practical
-- Reasoning: controlled by Atlas Intelligence Engine
-
-### Market Data
-
-Primary provider is not yet selected.
-
-Provider requirements:
-
-- US equities
-- Company metadata
-- Historical prices
-- Market status
-- Economic calendar
-- News access or compatibility with paired news provider
-
-### Hosting and Delivery
-
-- Hosting: Vercel
-- Repository: GitHub
-- CI/CD: GitHub Actions
-
-## 16. Development Roadmap
-
-Atlas should be built incrementally. Each milestone must produce a working, testable application.
-
-### Milestone 1: Project Foundation
-
-- Project initialization
-- GitHub repository
-- Next.js project
-- TypeScript configuration
-- Tailwind setup
-- shadcn/ui installation
-- Prisma configuration
-- Supabase connection
-- Authentication
-- Basic layout
-- Deployment pipeline
-
-### Milestone 2: Portfolio and Watchlist
-
-- Portfolio CRUD
-- Watchlist CRUD
-- Database models
-- Dashboard widgets
-- Portfolio calculations
-- Company search
-
-### Milestone 3: Market Intelligence
-
-- Market event ingestion
-- News ingestion
-- Basic Decision Engine
-- Insight generation
-- Insight storage
-- Dashboard integration
-
-### Milestone 4: Morning Brief
-
-- Morning Brief generation
-- Daily summaries
-- Portfolio updates
-- Economic calendar integration
-- Earnings integration
-
-### Milestone 5: AI Assistant
-
-- Context-aware prompts
-- Portfolio-aware responses
-- Insight explanations
-- Educational responses
-- Source-aware answers where practical
-
-### Milestone 6: Alpha Polish
-
-- Bug fixing
-- Performance improvements
-- UI polish
-- Accessibility review
-- Testing
-- Private alpha release
-- Feedback collection
-
-## 17. Implementation Guide
-
-### Guiding Principles
+## Guiding Principles
 
 1. Build one milestone at a time.
 2. Keep the application functional after every milestone.
 3. Do not implement future milestones early.
-4. Prefer simple, maintainable solutions over clever abstractions.
+4. Prefer simple, maintainable solutions over clever implementations.
 5. Optimize for readability before optimization.
-6. Every implementation decision should support the Atlas Doctrine.
-7. Treat the SDS as the source of truth.
+6. Ensure every implementation decision supports the Atlas Doctrine.
+7. Treat this SDS as the source of truth.
 
-### AI Coding Assistant Instructions
+## AI Coding Assistant Instructions
 
-When implementing Atlas:
+AI coding assistants must:
 
 - Read the SDS before beginning work.
-- Do not invent undocumented features.
-- Do not expand project scope without approval.
+- Avoid undocumented features and scope expansion.
 - Ask for clarification when requirements are ambiguous.
-- Complete one milestone before beginning another.
-- Generate maintainable production-quality code.
-- Avoid unnecessary abstraction.
-- Avoid premature optimization.
+- Complete one milestone before starting another.
+- Generate maintainable, production-quality code.
+- Avoid unnecessary abstraction and premature optimization.
 - Follow existing project conventions.
-- Preserve architectural boundaries.
+- Preserve SDS-defined architectural boundaries.
 
-### Engineering Standards
+## Engineering Standards
 
 Every pull request should:
 
-- Reference the milestone being implemented.
-- Remain focused on a single objective.
+- Reference the milestone or requirement being implemented.
+- Stay focused on one objective.
 - Compile successfully.
 - Avoid unrelated refactoring.
-- Update documentation when architectural behavior changes.
+- Update documentation when behavior or architecture changes.
 - Leave the project in a working state.
 
-### Code Quality
+Code should be readable, predictable, modular, type-safe, and documented where necessary. Business logic should remain isolated from presentation logic. Avoid magic numbers and unexplained constants. Prefer single-responsibility functions where practical.
 
-Code should be:
+## Testing
 
-- Readable
-- Predictable
-- Modular
-- Type-safe
-- Consistent with existing architecture
-- Documented where necessary
-
-Business logic should remain isolated from presentation logic. Magic numbers and unexplained constants should be avoided. Functions should have a single responsibility whenever practical.
-
-### Testing
-
-Critical business logic shall be tested, including:
+Critical business logic must be tested, especially:
 
 - Decision Engine scoring
 - Portfolio calculations
@@ -1340,38 +688,37 @@ Critical business logic shall be tested, including:
 - Morning Brief generation
 - Authentication flows
 
-Regression tests should be added for resolved defects when practical. Tests should focus on behavior rather than implementation details.
+Add regression tests for defects when practical. UI tests should focus on user behavior rather than implementation details.
 
-### Git Workflow
+## Git Workflow
 
-- Primary branch: `main`
-- Development branch: `develop`
-- Feature branch naming: `feature/<short-description>`
-- Bug fix branch naming: `fix/<short-description>`
-- Commit messages: concise and descriptive
+| Item | Standard |
+| --- | --- |
+| Primary branch | main |
+| Development branch | develop |
+| Feature branches | feature/<short-description> |
+| Bug fix branches | fix/<short-description> |
+| Commit messages | Concise, descriptive messages such as `feat: add portfolio dashboard`, `fix: correct gain calculation`, `refactor: simplify insight ranking`, `docs: update SDS`. |
 
-Example commit messages:
-
-- `feat: add portfolio dashboard`
-- `fix: correct gain calculation`
-- `refactor: simplify insight ranking`
-- `docs: update SDS`
-
-### Definition of Done
+## Definition of Done
 
 A task is complete when:
 
-- The implementation satisfies the documented requirement.
+- It satisfies the documented requirement.
 - The application builds successfully.
 - Relevant tests pass.
 - Documentation is updated if required.
 - No known critical defects remain.
-- The feature integrates cleanly with the existing architecture.
+- The feature integrates cleanly with existing architecture.
+
+## Engineering Philosophy
+
+Atlas should remain understandable. Future contributors should be able to understand a subsystem without reading the entire codebase. Each subsystem should have a clear responsibility. Complexity should appear only when justified by measurable value. The codebase should become easier to understand after each milestone.
 
 ## Closing Statement
 
 Atlas is built on the belief that clarity creates confidence.
 
-The goal is not to present more information. The goal is to transform information into understanding.
+Every architectural decision, feature, and engineering choice should help investors understand what matters. The goal is not to present more information; the goal is to transform information into understanding.
 
-Future evolution of Atlas should build on these principles while remaining open to new evidence, user feedback, and better ideas.
+Future evolution should build on these principles while remaining open to user feedback, new evidence, and better ideas.
