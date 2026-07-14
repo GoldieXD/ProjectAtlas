@@ -43,3 +43,56 @@ Atlas V1 is built to validate the core hypothesis that investors will consistent
 - Backend: Next.js Route Handlers, Supabase, PostgreSQL
 - AI: OpenAI API
 - Deployment: Vercel
+
+## Local Frontend Setup
+
+The initial Atlas application runtime lives in `frontend/`.
+
+Prerequisites:
+
+- Node.js 20, matching `frontend/.nvmrc`
+- npm
+
+Install and run locally:
+
+```bash
+cd frontend
+npm ci
+npm run dev
+```
+
+Then open `http://localhost:3000`.
+
+Health check:
+
+```bash
+curl http://localhost:3000/api/health
+```
+
+Expected JSON:
+
+```json
+{
+  "status": "ok",
+  "service": "atlas-frontend"
+}
+```
+
+## Verification Commands
+
+Run from `frontend/`:
+
+```bash
+npm ci
+npm run typecheck
+npm run lint
+npm run test
+npm run build
+```
+
+Run from the repository root:
+
+```bash
+git diff --check
+git status --short
+```

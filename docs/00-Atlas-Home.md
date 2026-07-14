@@ -6,13 +6,13 @@ The approved product and architecture source of truth is the [[Atlas-Software-De
 
 ## Current Repository Status
 
-Atlas is currently in documentation and foundation setup. The repository contains the SDS, README, roadmap, feature summary, vision summary, and documentation folders.
+Atlas is currently in documentation and foundation setup. The repository contains the SDS, README, roadmap, feature summary, vision summary, documentation folders, and the initial Next.js frontend foundation.
 
-Verified implementation directories are currently empty:
+Current implementation directories:
 
+- `frontend/` contains the initial Next.js App Router runtime, TypeScript configuration, health endpoint, and verification scripts for Issue #1.
 - `ai/`
 - `backend/`
-- `frontend/`
 - `tests/`
 
 No implemented application features are documented here as complete.
@@ -56,7 +56,7 @@ Before reporting implementation complete, run the repository's approved verifica
 - Unit tests
 - Production build
 
-Because the application foundation has not been created yet, these commands may not exist until Milestone 1 establishes the project toolchain.
+Issue #1 establishes the initial frontend verification commands under `frontend/`. Later milestone commands should be added only when the active task introduces them.
 
 ## Atlas Agent Workflow
 
@@ -76,7 +76,9 @@ Agents must not approve their own implementation, merge, deploy, modify secrets,
 
 ## Current Implementation Status
 
-The repository does not yet contain application source files, tests, package configuration, or build tooling. Milestone 1 foundation work remains pending.
+The repository now contains the initial `frontend/` application source, package configuration, test runner, and build tooling created for Issue #1.
+
+Milestone 1 remains partially complete only. Authentication, Supabase integration, Tailwind or UI library setup, deployment pipeline work, and product features are not documented as implemented here.
 
 Current documented MVP areas include [[features#Authentication|Authentication]], [[features#Portfolio|Portfolio]], [[features#Watchlist|Watchlist]], [[features#Dashboard|Dashboard]], [[features#Morning Brief|Morning Brief]], [[features#Insights|Insights]], [[features#AI Assistant|AI Assistant]], and [[features#Search and Company Pages|Search and Company Pages]].
 
