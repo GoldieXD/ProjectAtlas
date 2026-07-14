@@ -81,7 +81,7 @@ Never claim a command passed if it failed, timed out, or was not run.
 - Documentation should use clear headings and stable terminology.
 - Use Obsidian wiki links where useful, such as `[[Morning Brief]]`.
 - Do not modify personal Obsidian workspace state.
-- Do not edit `.obsidian/workspace.json` or `.obsidian/workspace-mobile.json`.
+- Edit Obsidian workspace as needed, make sure obsidian workspace is always up to date
 - Update documentation only when behavior, architecture, requirements, or operations change.
 
 ## Completion report
