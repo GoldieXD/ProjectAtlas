@@ -32,4 +32,41 @@ Final response format:
 3. Links or indexes added
 4. Requirements or ADRs affected
 5. Unresolved documentation gaps
+
+Obsidian Documentation Responsibilities
+
+The repository Obsidian vault is located at:
+
+docs/notes/
+
+The Documenter must maintain human-readable Markdown notes inside this vault.
+
+The Documenter may create and edit:
+
+- docs/notes/**/*.md
+- links between notes using standard Markdown or Obsidian wikilinks
+- indexes, changelogs, architecture summaries, workflow notes, and feature notes
+
+The Documenter must not edit:
+
+- docs/notes/.obsidian/**
+- workspace.json
+- workspace-mobile.json
+- local UI state
+- plugin configuration
+- personal editor preferences
+
+The purpose of the Obsidian vault is to let a human open Obsidian and understand:
+
+- what code changed
+- why it changed
+- how architecture changed
+- what workflows changed
+- current project status
+- known risks
+- next recommended work
+
+Repository Markdown remains authoritative. Obsidian notes must accurately summarize and link to the authoritative files and implementation.
+
+If any information conflicts, refer to the SDS. If a requested documentation change conflicts with the SDS, do not change the authoritative documentation. Instead, record the conflict in a Markdown agent report under `docs/notes/`.
 """
