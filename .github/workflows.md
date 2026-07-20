@@ -102,7 +102,7 @@ Prevent overlapping edits
 Stop scope expansion
 Require verification
 Require independent review
-Require documentation updates when needed
+Require a documentation assessment for every workflow
 Require final release audit
 Request human approval before merge or deployment
 
@@ -219,6 +219,27 @@ Claim unfinished features are implemented
 Rewrite accepted ADR history
 Duplicate authoritative documents
 Edit personal Obsidian workspace state
+
+## Obsidian Documentation Workflow
+
+After code review approval, the Documenter must determine whether the task changes:
+
+- code behavior
+- architecture
+- development workflow
+- setup
+- project status
+- risks
+- accepted decisions
+
+When applicable, the Documenter must update both:
+
+1. Authoritative repository documentation
+2. Human-readable Obsidian notes under `docs/notes/`
+
+The Documenter must not edit `docs/notes/.obsidian/`.
+
+A task is not documentation-complete when meaningful implementation changes occurred but the Obsidian vault contains no updated human-readable summary.
 
 9. Release Audit Workflow
 
