@@ -44,6 +44,8 @@ main
     ├── fix/<issue-number>-<short-description>
     └── docs/<issue-number>-<short-description>
 
+```
+
 3. Issue Workflow
 
 Every implementation task should begin with a GitHub issue.
@@ -293,6 +295,39 @@ For the MVP frontend, the working directory is:
 
 frontend/
 
+## Frontend Continuous Integration
+
+The active frontend CI workflow is `.github/workflows/frontend-ci.yml`.
+
+It runs on:
+
+- Pull requests targeting `rebuild/mvp`
+- Pushes to `rebuild/mvp`
+
+The workflow uses the Node.js version defined by `frontend/.nvmrc`, npm
+dependency caching keyed by `frontend/package-lock.json`, and npm exclusively.
+
+It runs these commands from `frontend/`:
+
+```bash
+npm ci
+npm run typecheck
+npm run lint
+npm run test
+npm run build
+```
+
+To reproduce CI locally, run the same commands from `frontend/`, then run these
+repository checks from the root:
+
+```bash
+git diff --check
+git status --short
+```
+
+The workflow uses explicit read-only repository permissions, requires no
+secrets, and performs no deployment.
+
 11. Dependency Workflow
 
 Before adding a dependency:
@@ -461,11 +496,4 @@ Documentation changes
 Release Auditor recommendation
 Remaining risks
 Recommended human action
-
-One adjustment: use either `workflows.md` under `docs/` or fold this into `ENGINEERING-PLAYBOOK.md`. Keeping both with overlapping rules can cause drift. My recommendation is:
-
-```text
-docs/workflows.md
-
-for the detailed process above, while ENGINEERING-PLAYBOOK.md stays the shorter high-level policy document.
 
