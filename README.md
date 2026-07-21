@@ -96,3 +96,16 @@ Run from the repository root:
 git diff --check
 git status --short
 ```
+
+## Continuous Integration
+
+GitHub Actions runs the frontend verification workflow on pull requests targeting
+`rebuild/mvp` and on pushes to `rebuild/mvp`.
+
+The workflow lives at `.github/workflows/frontend-ci.yml`. It uses the Node.js
+version from `frontend/.nvmrc`, installs dependencies with `npm ci`, caches npm
+dependencies using `frontend/package-lock.json`, and runs the same verification
+commands listed above from `frontend/`.
+
+The workflow requires no secrets, performs no deployment, and uses explicit
+read-only repository permissions.

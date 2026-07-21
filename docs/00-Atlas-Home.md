@@ -11,6 +11,7 @@ Atlas is currently in documentation and foundation setup. The repository contain
 Current implementation directories:
 
 - `frontend/` contains the initial Next.js App Router runtime, TypeScript configuration, health endpoint, and verification scripts for Issue #1.
+- `.github/workflows/frontend-ci.yml` runs automated frontend verification for pull requests targeting `rebuild/mvp` and pushes to `rebuild/mvp`.
 - `ai/`
 - `backend/`
 - `tests/`
@@ -56,7 +57,25 @@ Before reporting implementation complete, run the repository's approved verifica
 - Unit tests
 - Production build
 
-Issue #1 establishes the initial frontend verification commands under `frontend/`. Later milestone commands should be added only when the active task introduces them.
+Issue #1 establishes the initial frontend verification commands under `frontend/`. Issue #3 adds GitHub Actions CI that reproduces those commands automatically for pull requests targeting `rebuild/mvp` and pushes to `rebuild/mvp`.
+
+To reproduce frontend CI locally:
+
+```bash
+cd frontend
+npm ci
+npm run typecheck
+npm run lint
+npm run test
+npm run build
+```
+
+Then run from the repository root:
+
+```bash
+git diff --check
+git status --short
+```
 
 ## Atlas Agent Workflow
 
@@ -76,9 +95,9 @@ Agents must not approve their own implementation, merge, deploy, modify secrets,
 
 ## Current Implementation Status
 
-The repository now contains the initial `frontend/` application source, package configuration, test runner, and build tooling created for Issue #1.
+The repository now contains the initial `frontend/` application source, package configuration, test runner, build tooling created for Issue #1, and the frontend CI workflow created for Issue #3.
 
-Milestone 1 remains partially complete only. Authentication, Supabase integration, Tailwind or UI library setup, deployment pipeline work, and product features are not documented as implemented here.
+Milestone 1 remains partially complete only. Authentication, Supabase integration, Tailwind or UI library setup, deployment, and product features are not documented as implemented here.
 
 Current documented MVP areas include [[features#Authentication|Authentication]], [[features#Portfolio|Portfolio]], [[features#Watchlist|Watchlist]], [[features#Dashboard|Dashboard]], [[features#Morning Brief|Morning Brief]], [[features#Insights|Insights]], [[features#AI Assistant|AI Assistant]], and [[features#Search and Company Pages|Search and Company Pages]].
 
