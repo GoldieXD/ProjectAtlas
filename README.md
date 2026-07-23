@@ -78,6 +78,37 @@ Expected JSON:
 }
 ```
 
+## Application Shell Status
+
+Issue #5 adds the presentation-only application shell used to frame future Atlas
+features. The implementation is on `feature/005-application-shell` and remains
+subject to human review and merge. It does not provide working investment
+features.
+
+The shell provides shared navigation and honest placeholder pages at:
+
+- `/dashboard`
+- `/watchlist`
+- `/brief` for the future Morning Brief
+- `/insights`
+- `/assistant`
+- `/settings`
+
+On viewports below 768px, a labelled **Menu** button opens and closes the primary
+navigation. At 768px through 1023px, the shell uses a 208px sidebar. At 1024px
+and above, the sidebar is 248px wide. The shell also includes a shared page
+header and main-content region, an application-level not-found page, route
+loading states, a skip link, semantic landmarks, active-link `aria-current`,
+visible keyboard focus, and Escape-key menu closing with focus restored to the
+Menu button.
+
+The routes deliberately say that their content is unavailable or coming later.
+Authentication, database work, Supabase, Prisma, market data, portfolio and
+watchlist behavior, Morning Brief generation, Insights, AI behavior, settings
+functionality, and deployment remain deferred. See
+[`docs/notes/02 Engineering/Issue 5 - Application Shell.md`](docs/notes/02%20Engineering/Issue%205%20-%20Application%20Shell.md)
+for implementation structure, verification evidence, and limitations.
+
 ## Verification Commands
 
 Run from `frontend/`:

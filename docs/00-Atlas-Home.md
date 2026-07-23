@@ -6,17 +6,18 @@ The approved product and architecture source of truth is the [[Atlas-Software-De
 
 ## Current Repository Status
 
-Atlas is currently in documentation and foundation setup. The repository contains the SDS, README, roadmap, feature summary, vision summary, documentation folders, and the initial Next.js frontend foundation.
+Atlas is currently in foundation development. The repository contains the SDS, README, roadmap, feature summary, vision summary, documentation folders, the initial Next.js frontend foundation, CI, and an implementation-review-approved but not yet human-merged responsive application shell from Issue #5.
 
 Current implementation directories:
 
 - `frontend/` contains the initial Next.js App Router runtime, TypeScript configuration, health endpoint, and verification scripts for Issue #1.
+- `frontend/app/(application)/`, `frontend/components/`, and `frontend/lib/application-pages.ts` contain Issue #5's presentation-only shell, shared navigation, route placeholders, and route metadata. `frontend/app/globals.css` contains its responsive tokens and layout rules.
 - `.github/workflows/frontend-ci.yml` runs automated frontend verification for pull requests targeting `rebuild/mvp` and pushes to `rebuild/mvp`.
 - `ai/`
 - `backend/`
 - `tests/`
 
-No implemented application features are documented here as complete.
+No investment, intelligence, account, data, or settings feature is documented here as complete. The shell makes future destinations navigable but intentionally labels them unavailable.
 
 ## SDS Roadmap Milestone
 
@@ -34,6 +35,7 @@ Do not begin later milestone work unless it is explicitly authorized by the acti
 - [[roadmap|Roadmap]]
 - [[features|Features]]
 - [[vision|Vision]]
+- [[Issue 5 - Application Shell|Issue #5 Application Shell]]
 - [Architecture](Atlas-Software-Design-Specification.md#18-high-level-system-architecture) - architecture currently lives inside the SDS; no standalone architecture page exists yet.
 - [Agent Reports](agent-reports/) - folder exists, but no report files exist yet.
 
@@ -95,9 +97,11 @@ Agents must not approve their own implementation, merge, deploy, modify secrets,
 
 ## Current Implementation Status
 
-The repository now contains the initial `frontend/` application source, package configuration, test runner, build tooling created for Issue #1, and the frontend CI workflow created for Issue #3.
+The repository now contains the initial `frontend/` application source, package configuration, test runner, build tooling created for Issue #1, the frontend CI workflow created for Issue #3, and the responsive application shell created for Issue #5.
 
-Milestone 1 remains partially complete only. Authentication, Supabase integration, Tailwind or UI library setup, deployment, and product features are not documented as implemented here.
+The Issue #5 shell is presentation-only. It provides shared navigation to `/dashboard`, `/watchlist`, `/brief`, `/insights`, `/assistant`, and `/settings`; a mobile Menu below 768px; a 208px tablet sidebar beginning at 768px; and a 248px desktop sidebar beginning at 1024px. It also provides accessible loading and not-found states. See [[Issue 5 - Application Shell]] for exact behavior, evidence, and deferred scope.
+
+Milestone 1 remains partially complete only. Authentication, Supabase integration, Prisma and database work, market data, portfolio or watchlist behavior, Morning Brief generation, Insights, AI functionality, settings functionality, deployment, and other product features are not documented as implemented here.
 
 Current documented MVP areas include [[features#Authentication|Authentication]], [[features#Portfolio|Portfolio]], [[features#Watchlist|Watchlist]], [[features#Dashboard|Dashboard]], [[features#Morning Brief|Morning Brief]], [[features#Insights|Insights]], [[features#AI Assistant|AI Assistant]], and [[features#Search and Company Pages|Search and Company Pages]].
 
